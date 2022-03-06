@@ -3,83 +3,8 @@
 #include <cs50.h>
 #include <math.h>
 
-int firstTwoNumbers(long creditNumber, int length)
-{
-    long lengthMinusTwo = pow(10, length - 3);
-    long remaining = creditNumber % lengthMinusTwo;
-    long firstTwo = (creditNumber - remaining)/ pow(10, length - 2);
-
-    return(firstTwo);
-}
-
-
-
-
-int luhnCheck(long creditNumber, int length)
-{
-    int checkPartOne = 0;
-    {
-        long findRemainder;
-        long newRemainder = 1;
-        long prevRemainder = 1;
-        int everyOtherNumber;
-
-
-
-        for (int i = 0; i < length; i += 2)
-        {
-            findRemainder = pow(10, i);
-            prevRemainder = creditNumber % (findRemainder * 10);
-            newRemainder = creditNumber % (findRemainder * 100);
-            everyOtherNumber = (newRemainder - prevRemainder)/ (findRemainder * 10);
-            if ((everyOtherNumber * 2) > 9)
-            {
-                everyOtherNumber = 1 + ((everyOtherNumber * 2) % 10);
-            }
-            else
-            {
-                everyOtherNumber *= 2;
-            }
-            checkPartOne += everyOtherNumber;
-
-        }
-
-    }
-
-    int checkPartTwo = 0;
-    {
-        long findRemainder;
-        long newRemainder = 1;
-        long prevRemainder = 1;
-        int everyOtherNumber;
-
-
-
-        for (int i = 0; i < length + 1; i += 2)
-        {
-            findRemainder = pow(10, i);
-            prevRemainder = creditNumber % findRemainder;
-            newRemainder = creditNumber % (findRemainder * 10);
-            everyOtherNumber = (newRemainder - prevRemainder)/ (findRemainder);
-
-            checkPartTwo += everyOtherNumber;
-
-        }
-
-    }
-
-    int check = checkPartOne + checkPartTwo;
-    if ((check % 10) != 0)
-    {
-        return(false);
-    }
-    else
-    {
-        return(true);
-    }
-
-}
-
+int firstTwoNumbers(long creditNumber, int length);
+int luhnCheck(long creditNumber, int length);
 
 int main(void)
 {
@@ -158,5 +83,83 @@ int main(void)
 
     printf("%s\n", creditType);
 
+
+}
+
+
+int firstTwoNumbers(long creditNumber, int length)
+{
+    long lengthMinusTwo = pow(10, length - 3);
+    long remaining = creditNumber % lengthMinusTwo;
+    long firstTwo = (creditNumber - remaining)/ pow(10, length - 2);
+
+    return(firstTwo);
+}
+
+
+
+
+int luhnCheck(long creditNumber, int length)
+{
+    int checkPartOne = 0;
+    {
+        long findRemainder;
+        long newRemainder = 1;
+        long prevRemainder = 1;
+        int everyOtherNumber;
+
+
+
+        for (int i = 0; i &lt; length; i += 2)
+        {
+            findRemainder = pow(10, i);
+            prevRemainder = creditNumber % (findRemainder * 10);
+            newRemainder = creditNumber % (findRemainder * 100);
+            everyOtherNumber = (newRemainder - prevRemainder)/ (findRemainder * 10);
+            if ((everyOtherNumber * 2) &gt; 9)
+            {
+                everyOtherNumber = 1 + ((everyOtherNumber * 2) % 10);
+            }
+            else
+            {
+                everyOtherNumber *= 2;
+            }
+            checkPartOne += everyOtherNumber;
+
+        }
+
+    }
+
+    int checkPartTwo = 0;
+    {
+        long findRemainder;
+        long newRemainder = 1;
+        long prevRemainder = 1;
+        int everyOtherNumber;
+
+
+
+        for (int i = 0; i &lt; length + 1; i += 2)
+        {
+            findRemainder = pow(10, i);
+            prevRemainder = creditNumber % findRemainder;
+            newRemainder = creditNumber % (findRemainder * 10);
+            everyOtherNumber = (newRemainder - prevRemainder)/ (findRemainder);
+
+            checkPartTwo += everyOtherNumber;
+
+        }
+
+    }
+
+    int check = checkPartOne + checkPartTwo;
+    if ((check % 10) != 0)
+    {
+        return(false);
+    }
+    else
+    {
+        return(true);
+    }
 
 }
