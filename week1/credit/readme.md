@@ -60,7 +60,7 @@ To work out if a card number is valid:
 <pre>
 5 1 9 9 9 9 2 3 1 2 6 4 1 4 6 5
   ^   ^   ^   ^   ^   ^   ^   ^
-1 + 9 + 9 + 3  + 2 + 4 + 5 = 37
+  1 + 9 + 9 + 3 + 2 + 4 + 4 + 5 = 37
 </pre>
 
 8. Total your totals and divide them by 10
