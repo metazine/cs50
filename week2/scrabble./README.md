@@ -1,6 +1,6 @@
 # scrabble.c
 
-## what it does
+## What it does
 
 enter a word and it prints its base value in scrabble.
 
