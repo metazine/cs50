@@ -1,133 +1,74 @@
-
+#include <ctype.h>
 #include <cs50.h>
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 
-// Max number of candidates
-#define MAX 9
+int gradeTest(string text);
 
-// Candidates have name and vote count
-typedef struct
+
+int main(void)
 {
-    string name;
-    int votes;
+    string text = get_string("Text: ");
+    int grade = gradeTest(text);
+    if (grade > 15)
+    {
+        printf("Grade 16+\n");
+    }
+    else if (grade < 2)
+    {
+        printf("Before Grade 1\n");
+    }
+    else
+    {
+    printf("Grade %i\n", grade);
+    }
 }
-candidate;
 
-// Array of candidates
-candidate candidates[MAX];
-
-// Number of candidates
-int candidate_count;
-
-// Function prototypes
-bool vote(string name);
-void print_winner(void);
-
-int main(int argc, string argv[])
+int gradeTest(string text)
 {
-    // Check for invalid usage
-    if (argc < 2)
-    {
-        printf("Usage: plurality [candidate ...]\n");
-        return 1;
-    }
 
-    // Populate array of candidates
-    candidate_count = argc - 1;
-    if (candidate_count > MAX)
+    float letters = 0;
+    float sentences = 0;
+    float words = 1;
     {
-        printf("Maximum number of candidates is %i\n", MAX);
-        return 2;
-    }
-    
 
-    for (int i = 0; i < candidate_count; i++)
-    {
-        candidates[i].name = argv[i + 1];
-        candidates[i].votes = 0;
-    }
+        char sentenceChars[3] = {'.', '?', '!'};
+        int textLength = strlen(text);
 
-    int voter_count = get_int("Number of voters: ");
-
-    // Loop over all voters
-    for (int i = 0; i < voter_count; i++)
-    {
-        
-        string name = get_string("Vote: ");
-        bool validVote = false;
-        
-        // Check for invalid vote
-        do
+        for (int i = 0 ; i < textLength ; i++)
         {
-            for (int j = 0; j < candidate_count; j++)
+            //lower case ascii = 97 --> 122 //upper case ascii = 65 --> 90
+            char lowerChar = tolower(text[i]);
+            if (97 <= lowerChar && lowerChar <= 122)
             {
-                if(strcmp(candidates[j].name, name) == 0)
+                letters++;
+            }
+            else if(lowerChar == ' ')
+            {
+                words++;
+            }
+            else
+            {
+                for(int j = 0; j < 3; j++)
                 {
-                    validVote = true;
-                    vote(name);
-                    int debug = candidates[j].votes;
-                    break;
+                    if (lowerChar ==  sentenceChars[j])
+                    {
+                        sentences++;
+                        break;
+                    }
                 }
-                validVote = false;
-            }
-            if (validVote == false) {
-                printf("Invalid vote.\n");
-                name = get_string("Vote: ");
             }
         }
-        while (validVote == false);
-
     }
+
+    printf("letters %f\nwords %f\n sentences %f\n", letters, words, sentences);
     
-    // Display winner of election
-    print_winner();
-}
 
-// Update vote totals given a new vote
-bool vote(string name)
-{
-    for(int i = 0; i < candidate_count; i++)
-    {
-        if (strcmp(name, candidates[i].name) == 0)
-        {
-            candidates[i].votes ++;
-            return true;
-        }
-    }
-    // TODO
-    return false;
-}
+    float L = letters / words * 100.0;
+    float S = sentences / words * 100.0;
 
-// Print the winner (or winners) of the election
-// Print the winner (or winners) of the election
-void print_winner(void)
-{
-    int mostVotedCandidate[candidate_count];
-    mostVotedCandidate[0] = 0;
-    int k = 0;
-    for (int i = 1; i < candidate_count; i++)
-    {
-        if (candidates[i].votes > candidates[mostVotedCandidate[0]].votes)
-        {
-            mostVotedCandidate[0] = i;
-            for (int j = 1; j < candidate_count; j++){
-                k = 0;
-            }
-        }
-        else if (candidates[i].votes == candidates[mostVotedCandidate[0]].votes)
-        {
-            k += 1;
-            mostVotedCandidate[k] = i;
-        }
-    }
-    
-    for (int i = 0; i < k+1; i++)
-    {
-        printf("%s\n", candidates[mostVotedCandidate[i]].name);
-    }
-    
-    // TODO
-    return;
-}
+    int index = round(0.0588 * L - 0.296 * S - 15.8);
 
+    return index;
+}
