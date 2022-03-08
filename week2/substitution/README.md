@@ -71,3 +71,15 @@ It is encrypted as '0'
 
 It is encrypted overall as 'hjxo'
 </pre>
+
+## In my code
+
+I have done this by taking the ASCII value of the letter and taking away 65.  
+  Uppercase 'A' in ASCII translates to 65.
+  Therefore we can work out what position in the alphabet a letter is in this way.
+  
+With this number we can then index into the encryption key and add it to an array the same length + 1 as the text to encrypt.
+The extra character is to allow for an escape character.
+However I didn't know about escape characters and thus didn't actually make it the same length + 1.
+
+It then returns the encrypted string and this is then printed.
