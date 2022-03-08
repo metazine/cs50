@@ -6,8 +6,6 @@
 
 int main(int argc, char * argv[])
 {
-    bool valid;
-
     if (argc == 2 && argv[1][26] != '\0') {
         printf("Key must contain 26 characters.\n");
         return 1;
