@@ -9,7 +9,6 @@ int main(int argc, char * argv[])
     bool valid;
 
     if (argc == 2 && argv[1][26] != '\0') {
-        valid = false;
         printf("Key must contain 26 characters.\n");
         return 1;
     }
@@ -17,14 +16,9 @@ int main(int argc, char * argv[])
     {
         valid = false;
         printf("Usage: ./substitution key\n");
-        valid = false;
         return 1;
     }
-    else
-    {
-        valid = true;
-    }
-    
+
     for (int i = 0; i < strlen(argv[1]); i++) 
     {
         int alphabetical = isalpha(argv[1][i]);
@@ -69,8 +63,6 @@ int main(int argc, char * argv[])
             
         }
     }
-    if (valid == true) {
-        printf("ciphertext: %s\n", cipherText);
-        return 0;
-    }
+    printf("ciphertext: %s\n", cipherText);
+    return 0;
 }
