@@ -46,6 +46,18 @@ In order to find the pixel that is on the flipped side of an image I could take 
 I could then store rgb values of the pixel I was looking at.
   Then replace this with the rgb values of the pixel on the other side.
   Then replace the rgb values of the pixels on the other sides with the values stored in the temporary variable.
+ 
+You only have to go through half of the pixels across the x-axis otherwise they would be flipped twice.
+  This would result in the same image as input being made as output.
+
+This can be done like this:
+
+<pre>
+for (int x = 0; x < width/2; x++) {
+  for (int y = 0; y < height; y++) {
+  }
+}
+</pre>
   
 
 <img src="https://github.com/metazine/cs50/blob/main/week4/filter/astralEdge.png" alt="Edge detection image" style="width:400px;"/>
