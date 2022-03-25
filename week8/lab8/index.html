@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <link href="styles.css" rel="stylesheet">
+        <script src="code.js"></script>
+        <title>Trivia!</title>
+    </head>
+    <body>
+        <div class="header">
+            <h1>Trivia!</h1>
+        </div>
+
+        <div class="container">
+            <div>
+                <h2>Part 1: Multiple Choice </h2>
+                <hr>
+                <h3>What is the capital of Scotland?</h3>
+                <ul class="horizontal">
+                    <li>
+                        <button class="button wrong" id="england"> 
+                            England
+                        </button>
+                    </li>
+                    <li>
+                        <button class="button wrong" id="dunbar" >
+                            Dunbar
+                        </button>
+                    </li>
+                    <li>
+                        <button class="button correct" id="edinburgh" >
+                            Edinburgh
+                        </button>
+                    </li>
+                    <li>
+                        <button class="button wrong" id="glasgow">
+                            Glasgow
+                        </button>
+                    </li>
+                    <li>
+                        <button class="button wrong" id="london">
+                            London
+                        </button>
+                    </li>
+                </ul>
+                <p style="display: none;" id="wrong-answer-text">That is incorrect</p>
+                <p style="display: none;" id="correct-answer-text">That is correct</p>
+
+                <!-- TODO: Add multiple choice question here -->
+            </div>
+
+            <div>
+                <h2>Part 2: Free Response</h2>
+                <hr>
+                <h3>Think about these</h3>
+                <ul style="display:block;" class="vertical">
+                    <li>Clouds</li>
+                    <li>Porcelain</li>
+                    <li>Paper</li>
+                    <li>A radiator</li>
+                </ul>
+                <hr>
+                <h3>What do cows drink?</h3>
+                <!-- TODO: Add free response question here -->
+                <form action="" style="padding-bottom:20px">
+                    <input type="text" name="cow_drink" style="margin-bottom: 10px;" id="field-input"><br>
+                </form>
+                <button type="submit" id="submit">Submit</button>
+                <p id="form-result"></p>
+            </div>
+        </div>
+        <div class="footer" style="margin-top:20px;">
+
+        </div>
+    </body>
+</html>
