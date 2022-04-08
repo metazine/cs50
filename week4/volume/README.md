@@ -17,8 +17,11 @@ A wav file starts with a header that is 44 bytes long.
   This has to be read from the original file and written into the new one.
   
 The rest of the file is comprised of samples that are 2 bytes each.
-  It is stored as a signed integer.
+  It is stored as a signed integer as soundwaves can be up or down from the base line.
  
 The value of the sample maps to the height of the soundwave.
   The further from 0 the value is the louder the sound.
   
+## What the code does
+
+
