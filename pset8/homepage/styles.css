@@ -50,3 +50,12 @@ li {
 .metals{
     display:block;
 }
+
+img {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+figcaption {
+    margin-bottom: 30px;
+}
