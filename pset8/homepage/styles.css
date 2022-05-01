@@ -59,3 +59,9 @@ img {
 figcaption {
     margin-bottom: 30px;
 }
+
+.bond-list {
+    display:block;
+    margin: 20px 0;
+    list-style: disc;
+}
