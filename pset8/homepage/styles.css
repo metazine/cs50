@@ -60,8 +60,8 @@ figcaption {
     margin-bottom: 30px;
 }
 
-.bond-list {
+.block-list {
     display:block;
     margin: 20px 0;
-    list-style: disc;
+    list-style-type: circle;
 }
