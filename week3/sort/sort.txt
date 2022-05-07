@@ -1,0 +1,11 @@
+sort1 uses: bubble sort
+
+How do you know?: The average of three runs of reversed 10000 and three runs of random 10000 averaged to 0.47s which is longer than any other sorting algorithm listed, and bubble sort is the slowest.
+
+sort2 uses: merge sort
+
+How do you know?: Average came to 0.051 which is much faster than any other sort and merge sort is the fastest out of the available sorts
+
+sort3 uses: selection sort
+
+How do you know?: Average came to 0.28 which is faster than sort1 but much slower than sort 2 meaning it had to be the remaining selection sort
