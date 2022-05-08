@@ -65,3 +65,10 @@ figcaption {
     margin: 20px 0;
     list-style-type: circle;
 }
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
