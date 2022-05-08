@@ -59,11 +59,20 @@ for (int x = 0; x < width/2; x++) {
 }
 </pre>
   
+## blur filter
+
+The blur filter adds a soft blurring effect to an image. It is not a gaussian blur so that means that it doesn't keep lines and edges sharp.
+
+It works by running 3x3 kernel over every pixel in an image.
+  It total the red green and blue colour values into three different variables.
+  This is then divided by the number of pixels totalled.
+  
+It is not just divided by 9 as where the kernel checks pixels on the edge it wouldn't average the pixels.
+
+
+
 
 <img src="https://github.com/metazine/cs50/blob/main/week4/filter/astralEdge.png" alt="Edge detection image" style="width:400px;"/>
-
-
-
 
 <img src="https://github.com/metazine/cs50/blob/main/week4/filter/colouringImage.png" alt="Edge detection image" style="width:400px; display:inline;"/>
 
