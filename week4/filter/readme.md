@@ -75,6 +75,31 @@ Like the mirror it has to create a copy of the entire screen in order for the av
 
 Sobel edge detection is a type of filter that highlights edges in lighter colours and large areas of the same colour are dark/black.
 
+It works by running two kernels over the image - one that detects edges that are vertical.
+And the other that detects edges that are horizontal.
+
+The kernels are as follows.
+
+<pre>
+-1  0  1
+-2  0  2
+-1  0  1
+</pre>
+
+This kernel detects vertical edges.
+
+Each number corresponds to its position about the pixel being checked.
+The 0 in the middle represents the middle pixel.
+
+By having positive numbers on one side and negative numbers on the other the bigger the difference is the more extreme the number returned is.
+
+The 2nd row of the column has 2s in it. 
+  This is to weight the edge detection around the middle pixel.
+  This makes the pixels closer to the center pixel more important/weighted.
+  This creates a more sharp edge detection.
+
+
+
 
 
 
