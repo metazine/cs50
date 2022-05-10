@@ -69,6 +69,13 @@ It works by running 3x3 kernel over every pixel in an image.
   
 It is not just divided by 9 as where the kernel checks pixels on the edge it wouldn't average the pixels.
 
+Like the mirror it has to create a copy of the entire screen in order for the averaged pixels to not affect other pixels.
+
+## Sobel Edge Detection
+
+Sobel edge detection is a type of filter that highlights edges in lighter colours and large areas of the same colour are dark/black.
+
+
 
 
 
