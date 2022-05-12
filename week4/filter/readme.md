@@ -69,11 +69,61 @@ It works by running 3x3 kernel over every pixel in an image.
   
 It is not just divided by 9 as where the kernel checks pixels on the edge it wouldn't average the pixels.
 
+Like the mirror it has to create a copy of the entire screen in order for the averaged pixels to not affect other pixels.
 
+## Sobel Edge Detection
 
+Sobel edge detection is a type of filter that highlights edges in lighter colours and large areas of the same colour are dark/black.
+
+It works by running two kernels over the image - one that detects edges that are vertical.
+And the other that detects edges that are horizontal.
+
+The kernels are as follows.
+
+<pre>
+-1  0  1
+-2  0  2
+-1  0  1
+</pre>
+
+This kernel detects vertical edges.
+
+Each number corresponds to its position about the pixel being checked.
+The 0 in the middle represents the middle pixel.
+
+By having positive numbers on one side and negative numbers on the other the bigger the difference is the more extreme the number returned is.
+
+The 2nd row of the column has 2s in it. 
+  This is to weight the edge detection around the middle pixel.
+  This makes the pixels closer to the center pixel more important/weighted.
+  This creates a more sharp edge detection.
+  
+The other kernel is shaped like this:
+
+<pre>
+  -1 -2 -1
+   0  0  0
+   1  2  1
+</pre>
+
+This checks for edges that are horizontal.
+
+It works in the same way as the previous kernel.
+
+With these two values they then have to be combined to create the final colour.
+  This is done with a somewhat magic formula.
+ 
+ gx is the value returned by the first kernel and gy that of the second.
+ √(gx² + gy²)
+ 
+ This bares resemblance to pythagoras (a² + b² = c²) and serves as an effective way to combine the two values.
 
 <img src="https://github.com/metazine/cs50/blob/main/week4/filter/astralEdge.png" alt="Edge detection image" style="width:400px;"/>
 
+
+Here I updated the code to make things either be 255 or 0 and inverted the colours.
+  This new algorithm made it so you could generate colouring pictures from normal photos.
+  
 <img src="https://github.com/metazine/cs50/blob/main/week4/filter/colouringImage.png" alt="Edge detection image" style="width:400px; display:inline;"/>
 
 
