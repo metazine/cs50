@@ -20,7 +20,7 @@ First I had to try and get a basic understanding of how data types worked in C.
 
 The first part of the problem was to get the do while loop working.
     I used the built in CS50 library to take input.
-    I had to reject any pyramid sizes larger than 7 and they could also not be negative.
+    I had to reject any pyramid sizes greater than 7 and less than 0.
 
 The next problem I had to solve was to draw the pyramid itself
 
@@ -62,24 +62,23 @@ I worked out that there is a sort of upside down triangle on the left of the pyr
 ####
 </pre>
 
-At this point I had only spent 15 minutes making.
+At this point I had only worked on this for about 15 minutes.
     I thought that it couldn't be that difficult to complete the other side.
 
-At this point I start not thinking about how I can solve the solution well.
-    I instead start just trying to get the job done.
+At this point I started to not think about how I can solve the solution well.
+    Instead I began just trying to flimsily put things together to get the job done.
     This led me to making a "drawnGapOnce" variable that I created outside the for loops.
     
-I now use a bunch of magic numbers and basically magic code and then get the desired output.
+I used a bunch of magic numbers and spaghetti code to try and finish the pyramid.
 
 This code is full of unnecessary things that make it much harder to read.
     There are a fair amount of things I could have solved by simply moving things out of a loop.
     
 ## Conclusion
 
-This was at the very beginning of my coding, and served a good effort in learning a new language. 
-For my skill being able to even make the pyramid was more than what a lot of people that took the course could manage. 
+This was my second step into programming, and was a good introduction to strongly typed languages. 
 However it wasn't until later projects that I learnt better ways to do things. 
-    Be it more elegantly, or just naming things better.
+    Including better names and more elegant code.
 
 
 
