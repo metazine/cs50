@@ -31,7 +31,7 @@ gradeTest has one parameter - char* text
 First I define three variables to store the number of sentences, words and letters.
   'letters', 'words', 'sentences'.
   The 'words' variable starts at one because there isn't a space at the end of the last sentence.
-    My algorithm relies on spaces (' ') in order to count the number of words.
+    It uses spaces to count the number of words.
     
 I used a for loop in order to go through every character in the text.
   I use the tolower() from the ctype standard library.
@@ -105,7 +105,7 @@ This goes through each value in my sentenceChars array and compares them to the 
 
 After we have the number of words, letters and sentences we can then calculate a grade.
 
-This is done as follows:
+This is done with a magic formula:
 
 <pre>
 float L = letters / words * 100.0;
@@ -118,6 +118,6 @@ return index;
 
 When I wrote this code originally I had some difficulty with truncation of the integer data type and float.
   I solved this by putting a '.0' on the end of '100'.
-  I also made my 'letters', 'words' and 'sentences' variable be floats for good measure.
+  I also made my 'letters', 'words' and 'sentences' variable be floats because I didn't want to worry about any truncation.
 
-It then prints out what grade scored.
+It then outputs the grade.
