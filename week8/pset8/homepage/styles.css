@@ -72,3 +72,17 @@ figcaption {
     margin-right: auto;
     width: 50%;
 }
+
+.electron-container {
+    width: 400px;
+    height: 400px;
+    position: relative;
+    background: yellow;
+}
+
+.electron {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    background: red;
+}

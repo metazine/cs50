@@ -27,6 +27,25 @@
             At GCSE level the number of electrons in each shell is as follows:
             2, 8, 8, 8, 8, 8, 8, 8.
         </p>
+        <script>
+            var id = null;
+            function electronSimulation() {
+                var elem = document.querySelector(".electron");
+                var x = 0;
+                var y = 0;
+                id = setInterval(frame, 10);
+                function frame() {
+                    x++;
+                    y += 2;
+                    elem.style.top = x + 'px';
+                    elem.style.left = x + 'px';
+                }
+            }
+
+        </script>
+        <div class="electron-container">
+            <div class="electron"></div>
+        </div>
         <p>
             This means the first shell can contain a maximum of 2 electrons.
                 The second to eighth row can also only contain 8.
