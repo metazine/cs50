@@ -73,16 +73,19 @@ figcaption {
     width: 50%;
 }
 
-.electron-container {
+#electron-container {
     width: 400px;
     height: 400px;
     position: relative;
     background: yellow;
 }
 
-.electron {
-    width: 50px;
-    height: 50px;
+#electron {
+    width: 20px;
+    height: 20px;
     position: absolute;
+    top: 190px;
+    left: 190px;
     background: red;
+    border-radius: 50%;
 }

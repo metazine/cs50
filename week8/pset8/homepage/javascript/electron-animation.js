@@ -1,15 +1,14 @@
-"use strict";
-exports.__esModule = true;
 var id = null;
-function electronSimulation() {
-    var elem = document.querySelector(".electron");
-    var x = 0;
-    var y = 0;
+const HEIGHT = 400
+const WIDTH = 400
+function electronAnimation() {
+    var elem = document.getElementById("electron");   
+    var pos = 0;
+    clearInterval(id);
     id = setInterval(frame, 10);
     function frame() {
-        x++;
-        y += 2;
-        elem.style.top = x + 'px';
-        elem.style.left = x + 'px';
-    }
+        pos++; 
+        elem.style.top =  HEIGHT/2 + Math.sin(pos/50) * 40 + 'px'; 
+        elem.style.left = WIDTH/2 + Math.cos(pos/50) * 40 + 'px'; 
+  }
 }
