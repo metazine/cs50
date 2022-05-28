@@ -1,7 +1,6 @@
 const size = 50
 const speed = 100
 
-
 function setup() {
     createCanvas(400, 400);
     frameRate(60)
@@ -44,10 +43,10 @@ function to_radian(angle) {
 }
 
 const electron_outer_ring = new electron_ring(180, 8)
-const electron_inner_ring = new electron_ring(50, 2)
+const electron_inner_ring = new electron_ring(100, 2)
 
 function draw() {
-    background(220);
+    background(255);
     electron_outer_ring.draw()
     electron_inner_ring.draw()
 }
