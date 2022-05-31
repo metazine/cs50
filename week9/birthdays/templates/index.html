@@ -16,8 +16,11 @@
                 <h2>Add a Birthday</h2>
                 <!-- TODO: Create a form for users to submit a name, a month, and a day -->
 
-                <form>
-                    
+                <form method="post">
+                    <input autocomplete="off" autofocus name="name" placeholder="Name">
+                    <input autocomplete="off" autofocus name="month" placeholder="Month">
+                    <input autocomplete="off" autofocus name="day" placeholder="Day">
+                    <input type="submit">
                 </form>
 
 
@@ -35,6 +38,12 @@
                     </thead>
                     <tbody>
                         <!-- TODO: Loop through the database entries to display them in this table -->
+                        {% for birthday in birthdays%}
+                            <tr>
+                                <td>{{ birthday["name"]}}</td>
+                                <td>{{ birthday["month"]}}/{{birthday["day"]}}</td>
+                            </tr>
+                        {% endfor%}
                     </tbody>
                 </table>
             </div>

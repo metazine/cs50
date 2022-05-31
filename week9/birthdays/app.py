@@ -27,16 +27,27 @@ def index():
     if request.method == "POST":
 
         # TODO: Add the user's entry into the database
+        if not request.form.get("name") or not request.form.get("month") or not request.form.get("day"):
+            return "<h1>Hella invalid homie</h1>"
 
-        db.execute()
+        name = request.form.get("name")
+        month = request.form.get("month")
+        day = request.form.get("day")
+
+
+
+        db.execute(f"INSERT INTO birthdays (name, month, day) VALUES (\"{name}\",\"{month}\",\"{day}\");")
 
         return redirect("/")
 
     else:
 
         # TODO: Display the entries in the database on index.html
-        db.execute("SELECT name, month, day FROM birthdays")
 
-        return render_template("index.html")
+        birthdays = db.execute("SELECT * FROM birthdays")
+
+
+
+        return render_template("index.html", birthdays=birthdays)
 
 
