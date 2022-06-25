@@ -11,9 +11,9 @@ For every letter in the string it takes its position in the alphabet.
     It holds the scrabble score where the position in the array is the letter in the alphabet.
     
 <pre>
-POINTS[0] = 1 (a)
+(a) POINTS[0] = 1 
 
-POINTS[25] = 10 (z)
+(z) POINTS[25] = 10 
 </pre>
 
 The program takes the ASCII value of each letter in the word.
