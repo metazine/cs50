@@ -1,0 +1,16 @@
+{
+  "name": "image-filter",
+  "version": "1.0.0",
+  "description": "Small program that applies basic filters to images",
+  "main": "filter.js",
+  "scripts": {
+    "dev": "tsc -w *.ts",
+    "test": "node filter.js"
+  },
+  "author": "metazine",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^18.7.18",
+    "typescript": "^4.8.3"
+  }
+}
