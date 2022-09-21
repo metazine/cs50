@@ -28,7 +28,7 @@ def index():
 
         # TODO: Add the user's entry into the database
         if not request.form.get("name") or not request.form.get("month") or not request.form.get("day"):
-            return "<h1>Hella invalid homie</h1>"
+            return "<h1>Invalid</h1>"
 
         name = request.form.get("name")
         month = request.form.get("month")
