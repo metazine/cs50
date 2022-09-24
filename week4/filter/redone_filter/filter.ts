@@ -87,7 +87,53 @@ interface FilterDescriptor {
 const filterSpecs: Record <string, FilterDescriptor> = {
     "-g": {
         function: greyScale
+    },
+    "-e": {
+        function: edgeDetection
     }
+}
+
+function edgeDetection (rowsOfPixels: Pixel[][]) {
+    const kernel = [[1, 2, 1], [0, 0, 0], [1, 2, 1]]
+    const height = rowsOfPixels.length
+    const width = rowsOfPixels[0].length
+    
+    let filteredOutput: Pixel[][] = []
+
+    for (let y = 0; y < height; y++) {
+        let row: Pixel[] = []
+        for (let x = 0; x < width; x++) {
+            const gx: Pixel = {
+                a:0,
+                r: 0,
+                g:0,
+                b:0
+            }
+            const gy: Pixel = {
+                a:0,
+                r:0,
+                g:0,
+                b:0
+            }
+
+            for (let i = -1; i <= 1; i++) {
+                for (let j = -1; j <= 1; j++) {
+                    gx.r += rowsOfPixels[y + i][x + j].r * kernel[i + 1][j + 1]
+                    gx.g += rowsOfPixels[y + i][x + j].g * kernel[i + 1][j + 1]
+                    gx.b += rowsOfPixels[y + i][x + j].b * kernel[i + 1][j + 1]
+                    
+                    gy.r += rowsOfPixels[y + i][x + j].r * kernel[j + 1][i + 1]
+                    gy.g += rowsOfPixels[y + i][x + j].g * kernel[j + 1][i + 1]
+                    gy.b += rowsOfPixels[y + i][x + j].b * kernel[j + 1][i + 1]
+                }
+                
+            }
+        }
+    }
+
+
+
+
 }
 
 function greyScale(rowsOfPixels: Pixel[][]) {
