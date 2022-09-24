@@ -7,7 +7,17 @@ function main() {
     const inputBMPData = bmp.decode(inputBMPBuffer)
 
     const rowsOfPixels = bmpDataToRowsOfPixels(inputBMPData)
-    const filteredRowsOfPixels = greyScale(rowsOfPixels)
+    
+    let filteredRowsOfPixels: Pixel[][];
+    
+    try {
+        filteredRowsOfPixels = filterSpecs[process.argv[2]].function(rowsOfPixels)
+    } 
+    catch (e) {
+        console.log(`Unknown filter: "${process.argv[2]}"`)
+        process.exit(1)
+    }
+    
     const outputRGBdata = convertPixelArrayTo1DArray(filteredRowsOfPixels)
     
     const outputBMPData = inputBMPData
@@ -42,9 +52,8 @@ interface DecodedBMP {
     data: number[]
 }
 
-interface FilterSpecs {
-    
-}
+
+
 
 // CONVERT BMP TO TWO DIMENSIONAL ARRAY
 function bmpDataToRowsOfPixels(bmpData): Pixel[][] {
@@ -71,6 +80,16 @@ function bmpDataToRowsOfPixels(bmpData): Pixel[][] {
 
 
 // FILTER FUNCTIONS
+interface FilterDescriptor {
+    function: Function,
+}
+
+const filterSpecs: Record <string, FilterDescriptor> = {
+    "-g": {
+        function: greyScale
+    }
+}
+
 function greyScale(rowsOfPixels: Pixel[][]) {
     for (let y = 0; y < rowsOfPixels.length; y++) {
         for (let x = 0; x < rowsOfPixels[y].length; x++) {
