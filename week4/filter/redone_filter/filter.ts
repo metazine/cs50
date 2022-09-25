@@ -1,10 +1,14 @@
+import test from "node:test"
+
 const fs = require('fs')
 const bmp = require('bmp-js')
 
 function main() {
     // LOAD IN BMP
     const inputBMPBuffer = fs.readFileSync(process.argv[3])
-    const inputBMPData = bmp.decode(inputBMPBuffer)
+
+    const inputBMPData: DecodedBMP = bmp.decode(inputBMPBuffer)
+
 
     const rowsOfPixels = bmpDataToRowsOfPixels(inputBMPData)
     
@@ -13,7 +17,7 @@ function main() {
     try {
         filteredRowsOfPixels = filterSpecs[process.argv[2]].function(rowsOfPixels)
     } 
-    catch (e) {
+    catch {
         console.log(`Unknown filter: "${process.argv[2]}"`)
         process.exit(1)
     }
@@ -56,7 +60,7 @@ interface DecodedBMP {
 
 
 // CONVERT BMP TO TWO DIMENSIONAL ARRAY
-function bmpDataToRowsOfPixels(bmpData): Pixel[][] {
+function bmpDataToRowsOfPixels(bmpData: DecodedBMP): Pixel[][] {
     let rowsOfPixels: Pixel[][] = []
 
     const VALUES_PER_PIXEL = 4
@@ -87,53 +91,90 @@ interface FilterDescriptor {
 const filterSpecs: Record <string, FilterDescriptor> = {
     "-g": {
         function: greyScale
+        //function: greyScale
     },
     "-e": {
         function: edgeDetection
+    },
+    "-c": {
+        function: coloringBook
     }
 }
 
-function edgeDetection (rowsOfPixels: Pixel[][]) {
-    const kernel = [[1, 2, 1], [0, 0, 0], [1, 2, 1]]
+function edgeDetection (rowsOfPixels: Pixel[][]): Pixel[][] {
+    const kernel = [[1, 2, 1], [0, 0, 0], [-1, -2, -1]]
     const height = rowsOfPixels.length
     const width = rowsOfPixels[0].length
     
     let filteredOutput: Pixel[][] = []
-
     for (let y = 0; y < height; y++) {
         let row: Pixel[] = []
         for (let x = 0; x < width; x++) {
             const gx: Pixel = {
-                a:0,
+                a: 0,
                 r: 0,
-                g:0,
-                b:0
+                g: 0,
+                b: 0
             }
             const gy: Pixel = {
-                a:0,
-                r:0,
-                g:0,
-                b:0
+                a: 0,
+                r: 0,
+                g: 0,
+                b: 0
             }
 
-            for (let i = -1; i <= 1; i++) {
-                for (let j = -1; j <= 1; j++) {
-                    gx.r += rowsOfPixels[y + i][x + j].r * kernel[i + 1][j + 1]
-                    gx.g += rowsOfPixels[y + i][x + j].g * kernel[i + 1][j + 1]
-                    gx.b += rowsOfPixels[y + i][x + j].b * kernel[i + 1][j + 1]
+            for (var i = -1; i <= 1; i++) {
+                for (var j = -1; j <= 1; j++) {
+                    var yKernelPos = (y + i + height) % height;
+                    var xKernelPos = (x + j + width) % width;
+
+                    gx.r += rowsOfPixels[yKernelPos][xKernelPos].r * kernel[i + 1][j + 1];
+                    gx.g += rowsOfPixels[yKernelPos][xKernelPos].g * kernel[i + 1][j + 1];
+                    gx.b += rowsOfPixels[yKernelPos][xKernelPos].b * kernel[i + 1][j + 1];
                     
-                    gy.r += rowsOfPixels[y + i][x + j].r * kernel[j + 1][i + 1]
-                    gy.g += rowsOfPixels[y + i][x + j].g * kernel[j + 1][i + 1]
-                    gy.b += rowsOfPixels[y + i][x + j].b * kernel[j + 1][i + 1]
+                    gy.r += rowsOfPixels[yKernelPos][xKernelPos].r * kernel[j + 1][i + 1];
+                    gy.g += rowsOfPixels[yKernelPos][xKernelPos].g * kernel[j + 1][i + 1];
+                    gy.b += rowsOfPixels[yKernelPos][xKernelPos].b * kernel[j + 1][i + 1];
                 }
-                
             }
+            const filteredPixel: Pixel = {
+                a: 0,
+                r: Math.sqrt(gx.r * gx.r + gy.r * gy.r),
+                g: Math.sqrt(gx.g * gx.g + gy.g * gy.g),
+                b: Math.sqrt(gx.b * gx.b + gy.b * gy.b),
+            }
+
+            filteredPixel.r = filteredPixel.r > 255 ? 255 : filteredPixel.r
+            filteredPixel.g = filteredPixel.g > 255 ? 255 : filteredPixel.g
+            filteredPixel.b = filteredPixel.b > 255 ? 255 : filteredPixel.b
+
+            if (filteredPixel.r < 0) {
+                console.log(filteredPixel.r)
+            }
+
+            row.push(filteredPixel)
+        }
+        filteredOutput.push(row)
+    }
+    return filteredOutput
+}
+
+function coloringBook (rowsOfPixels: Pixel[][]): Pixel[][] {
+    rowsOfPixels = greyScale(rowsOfPixels)
+    rowsOfPixels = edgeDetection(rowsOfPixels)
+    const height = rowsOfPixels.length
+    const width = rowsOfPixels[0].length
+
+    for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+            let valueSplit = 75
+            rowsOfPixels[y][x].r = rowsOfPixels[y][x].r > valueSplit ? 0 : 255
+            rowsOfPixels[y][x].g = rowsOfPixels[y][x].g > valueSplit ? 0 : 255
+            rowsOfPixels[y][x].b = rowsOfPixels[y][x].b > valueSplit ? 0 : 255
+
         }
     }
-
-
-
-
+    return rowsOfPixels   
 }
 
 function greyScale(rowsOfPixels: Pixel[][]) {
