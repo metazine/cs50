@@ -1,4 +1,5 @@
 import test from "node:test"
+import { OutputFileType } from "typescript"
 
 const fs = require('fs')
 const bmp = require('bmp-js')
@@ -98,99 +99,165 @@ const filterSpecs: Record <string, FilterDescriptor> = {
     },
     "-c": {
         function: coloringBook
+    },
+    "-gb": {
+        function: gaussianBlur
     }
 }
 
-function edgeDetection (rowsOfPixels: Pixel[][]): Pixel[][] {
-    const kernel = [[1, 2, 1], [0, 0, 0], [-1, -2, -1]]
-    const height = rowsOfPixels.length
-    const width = rowsOfPixels[0].length
+function edgeDetection (inputImage: Pixel[][]): Pixel[][] {
+    const gx_image = applyKernel([[1, 2, 1],[0, 0 ,0],[1, -2, 1]], inputImage)
+    const gy_image = applyKernel([[1, 0, -1],[2, 0 ,-2],[1, 0, -1]], inputImage)
+
     
-    let filteredOutput: Pixel[][] = []
+    
+    // const kernel = [[1, 2, 1], [0, 0, 0], [-1, -2, -1]]
+    const height = inputImage.length
+    const width = inputImage[0].length
+    
+    // rowsOfPixels = gaussianBlur(rowsOfPixels)
+
+    // let filteredOutput: Pixel[][] = []
+    // for (let y = 0; y < height; y++) {
+    //     let row: Pixel[] = []
+    //     for (let x = 0; x < width; x++) {
+    //         const gx: Pixel = {
+    //             a: 0,
+    //             r: 0,
+    //             g: 0,
+    //             b: 0
+    //         }
+    //         const gy: Pixel = {
+    //             a: 0,
+    //             r: 0,
+    //             g: 0,
+    //             b: 0
+    //         }
+
+    //         for (let i = -1; i <= 1; i++) {
+    //             for (let j = -1; j <= 1; j++) {
+    //                 let yKernelPos = (y + i + height) % height;
+    //                 let xKernelPos = (x + j + width) % width;
+
+    //                 gx.r += rowsOfPixels[yKernelPos][xKernelPos].r * kernel[i + 1][j + 1];
+    //                 gx.g += rowsOfPixels[yKernelPos][xKernelPos].g * kernel[i + 1][j + 1];
+    //                 gx.b += rowsOfPixels[yKernelPos][xKernelPos].b * kernel[i + 1][j + 1];
+
+
+                    
+    //                 gy.r += rowsOfPixels[yKernelPos][xKernelPos].r * kernel[j + 1][i + 1];
+    //                 gy.g += rowsOfPixels[yKernelPos][xKernelPos].g * kernel[j + 1][i + 1];
+    //                 gy.b += rowsOfPixels[yKernelPos][xKernelPos].b * kernel[j + 1][i + 1];
+    //             }
+    //         }
+    //         const filteredPixel: Pixel = {
+    //             a: 0,
+    //             r: Math.sqrt(gx.r * gx.r + gy.r * gy.r),
+    //             g: Math.sqrt(gx.g * gx.g + gy.g * gy.g),
+    //             b: Math.sqrt(gx.b * gx.b + gy.b * gy.b),
+    //         }
+
+    //         filteredPixel.r = filteredPixel.r > 255 ? 255 : filteredPixel.r
+    //         filteredPixel.g = filteredPixel.g > 255 ? 255 : filteredPixel.g
+    //         filteredPixel.b = filteredPixel.b > 255 ? 255 : filteredPixel.b
+
+    //         if (filteredPixel.r < 0) {
+    //             console.log(filteredPixel.r)
+    //         }
+
+    //         row.push(filteredPixel)
+    //     }
+    //     filteredOutput.push(row)
+    // }
+    // return filteredOutput
+}
+
+function coloringBook (inputImage: Pixel[][]): Pixel[][] {
+    let outputImage: Pixel[][] = JSON.parse(JSON.stringify(inputImage))
+
+    outputImage = greyScale(outputImage)
+    outputImage = edgeDetection(outputImage)
+    const height = outputImage.length
+    const width = outputImage[0].length
+
+    for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+            let valueSplit = 50
+            outputImage[y][x].r = outputImage[y][x].r > valueSplit ? 0 : 255
+            outputImage[y][x].g = outputImage[y][x].g > valueSplit ? 0 : 255
+            outputImage[y][x].b = outputImage[y][x].b > valueSplit ? 0 : 255
+        }
+    }
+    outputImage = gaussianBlur(outputImage)
+    return outputImage
+}
+
+
+function gaussianBlur(inputImage: Pixel[][]) {
+    const outputImage = applyKernel([[1, 2, 1], [2, 4, 2], [1, 2, 1]], inputImage)
+    return outputImage
+}
+
+function greyScale(inputImage: Pixel[][]) {
+    const outputImage = JSON.parse(JSON.stringify(inputImage))
+    for (let y = 0; y < outputImage.length; y++) {
+        for (let x = 0; x < outputImage[y].length; x++) {
+            const averageOfColours = (outputImage[y][x].r + outputImage[y][x].g + outputImage[y][x].b) / 3
+            outputImage[y][x].a = 0
+            outputImage[y][x].r = averageOfColours
+            outputImage[y][x].g = averageOfColours
+            outputImage[y][x].b = averageOfColours
+        }
+    }
+    return outputImage
+}
+
+function applyKernel(kernel: number[][], inputImage: Pixel[][]) {
+    const height = inputImage.length
+    const width = inputImage[0].length
+
+    const kernelSize = kernel.length
+    const kernelOffset = (kernelSize - 1) / 2
+
+    let kernelTotal: number = 0;
+    kernel.forEach((row) => {
+        row.forEach((value) => {
+            kernelTotal += value
+        })
+    })
+
+    if (kernelSize % 2 == 0) {
+        throw new Error("Invalid kernel size")
+    }
+
+    let output: Pixel[][] = []
+
     for (let y = 0; y < height; y++) {
         let row: Pixel[] = []
         for (let x = 0; x < width; x++) {
-            const gx: Pixel = {
+            const pixel: Pixel = {
                 a: 0,
                 r: 0,
                 g: 0,
                 b: 0
             }
-            const gy: Pixel = {
-                a: 0,
-                r: 0,
-                g: 0,
-                b: 0
-            }
+            for (let i = -kernelOffset; i <= kernelOffset; i++) {
+                for (let j = -kernelOffset; j <= kernelOffset; j++) {
+                    const yKernelPos = (y + i + height) % height;
+                    const xKernelPos = (x + j + width) % width;
 
-            for (var i = -1; i <= 1; i++) {
-                for (var j = -1; j <= 1; j++) {
-                    var yKernelPos = (y + i + height) % height;
-                    var xKernelPos = (x + j + width) % width;
-
-                    gx.r += rowsOfPixels[yKernelPos][xKernelPos].r * kernel[i + 1][j + 1];
-                    gx.g += rowsOfPixels[yKernelPos][xKernelPos].g * kernel[i + 1][j + 1];
-                    gx.b += rowsOfPixels[yKernelPos][xKernelPos].b * kernel[i + 1][j + 1];
-                    
-                    gy.r += rowsOfPixels[yKernelPos][xKernelPos].r * kernel[j + 1][i + 1];
-                    gy.g += rowsOfPixels[yKernelPos][xKernelPos].g * kernel[j + 1][i + 1];
-                    gy.b += rowsOfPixels[yKernelPos][xKernelPos].b * kernel[j + 1][i + 1];
+                    pixel.r += inputImage[yKernelPos][xKernelPos].r * kernel[j + 1][i + 1] / kernelTotal;
+                    pixel.g += inputImage[yKernelPos][xKernelPos].g * kernel[j + 1][i + 1] / kernelTotal;
+                    pixel.b += inputImage[yKernelPos][xKernelPos].b * kernel[j + 1][i + 1] / kernelTotal;
                 }
             }
-            const filteredPixel: Pixel = {
-                a: 0,
-                r: Math.sqrt(gx.r * gx.r + gy.r * gy.r),
-                g: Math.sqrt(gx.g * gx.g + gy.g * gy.g),
-                b: Math.sqrt(gx.b * gx.b + gy.b * gy.b),
-            }
-
-            filteredPixel.r = filteredPixel.r > 255 ? 255 : filteredPixel.r
-            filteredPixel.g = filteredPixel.g > 255 ? 255 : filteredPixel.g
-            filteredPixel.b = filteredPixel.b > 255 ? 255 : filteredPixel.b
-
-            if (filteredPixel.r < 0) {
-                console.log(filteredPixel.r)
-            }
-
-            row.push(filteredPixel)
+            row.push(pixel)
         }
-        filteredOutput.push(row)
+        output.push(row)
     }
-    return filteredOutput
-}
-
-function coloringBook (rowsOfPixels: Pixel[][]): Pixel[][] {
-    rowsOfPixels = greyScale(rowsOfPixels)
-    rowsOfPixels = edgeDetection(rowsOfPixels)
-    const height = rowsOfPixels.length
-    const width = rowsOfPixels[0].length
-
-    for (let y = 0; y < height; y++) {
-        for (let x = 0; x < width; x++) {
-            let valueSplit = 75
-            rowsOfPixels[y][x].r = rowsOfPixels[y][x].r > valueSplit ? 0 : 255
-            rowsOfPixels[y][x].g = rowsOfPixels[y][x].g > valueSplit ? 0 : 255
-            rowsOfPixels[y][x].b = rowsOfPixels[y][x].b > valueSplit ? 0 : 255
-
-        }
-    }
-    return rowsOfPixels   
-}
-
-function greyScale(rowsOfPixels: Pixel[][]) {
-    for (let y = 0; y < rowsOfPixels.length; y++) {
-        for (let x = 0; x < rowsOfPixels[y].length; x++) {
-            const averageOfColours = (rowsOfPixels[y][x].r + rowsOfPixels[y][x].g + rowsOfPixels[y][x].b) / 3
-            rowsOfPixels[y][x].a = 0
-            rowsOfPixels[y][x].r = averageOfColours
-            rowsOfPixels[y][x].g = averageOfColours
-            rowsOfPixels[y][x].b = averageOfColours
-        }
-    }
-    return rowsOfPixels
+    return output
 
 }
-
 //rowsOfPixels = greyScale(rowsOfPixels)
 
 // CONVERT FILTERED 2D ARRAY TO A 1D ARRAY
