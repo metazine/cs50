@@ -108,68 +108,27 @@ const filterSpecs: Record <string, FilterDescriptor> = {
 function edgeDetection (inputImage: Pixel[][]): Pixel[][] {
     const gx_image = applyKernel([[1, 2, 1],[0, 0 ,0],[1, -2, 1]], inputImage)
     const gy_image = applyKernel([[1, 0, -1],[2, 0 ,-2],[1, 0, -1]], inputImage)
-
     
-    
-    // const kernel = [[1, 2, 1], [0, 0, 0], [-1, -2, -1]]
     const height = inputImage.length
     const width = inputImage[0].length
-    
-    // rowsOfPixels = gaussianBlur(rowsOfPixels)
 
-    // let filteredOutput: Pixel[][] = []
-    // for (let y = 0; y < height; y++) {
-    //     let row: Pixel[] = []
-    //     for (let x = 0; x < width; x++) {
-    //         const gx: Pixel = {
-    //             a: 0,
-    //             r: 0,
-    //             g: 0,
-    //             b: 0
-    //         }
-    //         const gy: Pixel = {
-    //             a: 0,
-    //             r: 0,
-    //             g: 0,
-    //             b: 0
-    //         }
+    let outputImage: Pixel[][] = []
 
-    //         for (let i = -1; i <= 1; i++) {
-    //             for (let j = -1; j <= 1; j++) {
-    //                 let yKernelPos = (y + i + height) % height;
-    //                 let xKernelPos = (x + j + width) % width;
+    for (let y = 0; y < height; y++) {
+        let row: Pixel[] = []
+        for (let x = 0; x < width; x++) {
+            const pixel: Pixel = {
+                a: 0,
+                r: Math.sqrt(Math.pow(gx_image[y][x].r, 2) + Math.pow(gy_image[y][x].r, 2)),
+                g: Math.sqrt(Math.pow(gx_image[y][x].g, 2) + Math.pow(gy_image[y][x].g, 2)),
+                b: Math.sqrt(Math.pow(gx_image[y][x].b, 2) + Math.pow(gy_image[y][x].b, 2))
+            }
+            row.push(pixel)
+        }
+        outputImage.push(row)
+    }
 
-    //                 gx.r += rowsOfPixels[yKernelPos][xKernelPos].r * kernel[i + 1][j + 1];
-    //                 gx.g += rowsOfPixels[yKernelPos][xKernelPos].g * kernel[i + 1][j + 1];
-    //                 gx.b += rowsOfPixels[yKernelPos][xKernelPos].b * kernel[i + 1][j + 1];
-
-
-                    
-    //                 gy.r += rowsOfPixels[yKernelPos][xKernelPos].r * kernel[j + 1][i + 1];
-    //                 gy.g += rowsOfPixels[yKernelPos][xKernelPos].g * kernel[j + 1][i + 1];
-    //                 gy.b += rowsOfPixels[yKernelPos][xKernelPos].b * kernel[j + 1][i + 1];
-    //             }
-    //         }
-    //         const filteredPixel: Pixel = {
-    //             a: 0,
-    //             r: Math.sqrt(gx.r * gx.r + gy.r * gy.r),
-    //             g: Math.sqrt(gx.g * gx.g + gy.g * gy.g),
-    //             b: Math.sqrt(gx.b * gx.b + gy.b * gy.b),
-    //         }
-
-    //         filteredPixel.r = filteredPixel.r > 255 ? 255 : filteredPixel.r
-    //         filteredPixel.g = filteredPixel.g > 255 ? 255 : filteredPixel.g
-    //         filteredPixel.b = filteredPixel.b > 255 ? 255 : filteredPixel.b
-
-    //         if (filteredPixel.r < 0) {
-    //             console.log(filteredPixel.r)
-    //         }
-
-    //         row.push(filteredPixel)
-    //     }
-    //     filteredOutput.push(row)
-    // }
-    // return filteredOutput
+    return outputImage
 }
 
 function coloringBook (inputImage: Pixel[][]): Pixel[][] {
