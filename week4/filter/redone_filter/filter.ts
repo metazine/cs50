@@ -131,9 +131,9 @@ function edgeDetection (inputImage: Pixel[][]): Pixel[][] {
         for (let x = 0; x < width; x++) {
             const pixel: Pixel = {
                 a: 0,
-                r: Math.sqrt(Math.pow(gx_image[y][x].r, 2)), //+ Math.pow(gy_image[y][x].r, 2)),
-                g: Math.sqrt(Math.pow(gx_image[y][x].g, 2)), //+ Math.pow(gy_image[y][x].g, 2)),
-                b: Math.sqrt(Math.pow(gx_image[y][x].b, 2)), //+ Math.pow(gy_image[y][x].b, 2))
+                r: Math.sqrt(Math.pow(gx_image[y][x].r, 2) + Math.pow(gy_image[y][x].r, 2)),
+                g: Math.sqrt(Math.pow(gx_image[y][x].g, 2) + Math.pow(gy_image[y][x].g, 2)),
+                b: Math.sqrt(Math.pow(gx_image[y][x].b, 2) + Math.pow(gy_image[y][x].b, 2))
             }
             row.push(pixel)
         }
