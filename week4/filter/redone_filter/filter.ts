@@ -106,8 +106,20 @@ const filterSpecs: Record <string, FilterDescriptor> = {
 }
 
 function edgeDetection (inputImage: Pixel[][]): Pixel[][] {
-    const gx_image = applyKernel([[1, 2, 1],[0, 0 ,0],[1, -2, 1]], inputImage)
-    const gy_image = applyKernel([[1, 0, -1],[2, 0 ,-2],[1, 0, -1]], inputImage)
+    const gx_image = applyKernel([
+        [1, 2, 1],
+        [0, 0, 0],
+        [-1, -2, 1]
+    ], inputImage)
+    
+    const gy_image = applyKernel([
+        [1, 0, -1],
+        [2, 0, -2],
+        [1, 0, -1]
+    ], inputImage)
+
+    console.log(gx_image[50])
+    console.log(gy_image[50])
     
     const height = inputImage.length
     const width = inputImage[0].length
@@ -119,9 +131,9 @@ function edgeDetection (inputImage: Pixel[][]): Pixel[][] {
         for (let x = 0; x < width; x++) {
             const pixel: Pixel = {
                 a: 0,
-                r: Math.sqrt(Math.pow(gx_image[y][x].r, 2) + Math.pow(gy_image[y][x].r, 2)),
-                g: Math.sqrt(Math.pow(gx_image[y][x].g, 2) + Math.pow(gy_image[y][x].g, 2)),
-                b: Math.sqrt(Math.pow(gx_image[y][x].b, 2) + Math.pow(gy_image[y][x].b, 2))
+                r: Math.sqrt(Math.pow(gx_image[y][x].r, 2)), //+ Math.pow(gy_image[y][x].r, 2)),
+                g: Math.sqrt(Math.pow(gx_image[y][x].g, 2)), //+ Math.pow(gy_image[y][x].g, 2)),
+                b: Math.sqrt(Math.pow(gx_image[y][x].b, 2)), //+ Math.pow(gy_image[y][x].b, 2))
             }
             row.push(pixel)
         }
@@ -184,6 +196,8 @@ function applyKernel(kernel: number[][], inputImage: Pixel[][]) {
             kernelTotal += value
         })
     })
+
+    kernelTotal = kernelTotal || 1
 
     if (kernelSize % 2 == 0) {
         throw new Error("Invalid kernel size")
