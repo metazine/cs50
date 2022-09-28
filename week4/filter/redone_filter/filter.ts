@@ -231,7 +231,6 @@ function applyKernel(kernel: number[][], inputImage: Pixel[][]) {
     return output
 
 }
-//rowsOfPixels = greyScale(rowsOfPixels)
 
 // CONVERT FILTERED 2D ARRAY TO A 1D ARRAY
 function convertPixelArrayTo1DArray(rowsOfPixels: Pixel[][]) {
