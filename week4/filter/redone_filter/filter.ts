@@ -106,21 +106,19 @@ const filterSpecs: Record <string, FilterDescriptor> = {
 }
 
 function edgeDetection (inputImage: Pixel[][]): Pixel[][] {
-    const gx_image = applyKernel([
+    const gy_image = applyKernel([
         [1, 2, 1],
         [0, 0, 0],
         [-1, -2, 1]
     ], inputImage)
     
-    const gy_image = applyKernel([
+
+    const gx_image = applyKernel([
         [1, 0, -1],
         [2, 0, -2],
         [1, 0, -1]
     ], inputImage)
-
-    console.log(gx_image[50])
-    console.log(gy_image[50])
-    
+   
     const height = inputImage.length
     const width = inputImage[0].length
 
@@ -202,6 +200,8 @@ function applyKernel(kernel: number[][], inputImage: Pixel[][]) {
     if (kernelSize % 2 == 0) {
         throw new Error("Invalid kernel size")
     }
+
+    console.log(kernel)
 
     let output: Pixel[][] = []
 
