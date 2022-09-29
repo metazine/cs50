@@ -1,17 +1,14 @@
-import test from "node:test"
-import { OutputFileType } from "typescript"
-
 const fs = require('fs')
 const bmp = require('bmp-js')
 
 function main() {
     // LOAD IN BMP
-    const inputBMPBuffer = fs.readFileSync(process.argv[3])
+    const inputBMPBuffer: Buffer = fs.readFileSync(process.argv[3])
 
     const inputBMPData: DecodedBMP = bmp.decode(inputBMPBuffer)
 
 
-    const rowsOfPixels = bmpDataToRowsOfPixels(inputBMPData)
+    const rowsOfPixels: Pixel[][] = bmpDataToRowsOfPixels(inputBMPData)
     
     let filteredRowsOfPixels: Pixel[][];
     
@@ -23,14 +20,16 @@ function main() {
         process.exit(1)
     }
     
-    const outputRGBdata = convertPixelArrayTo1DArray(filteredRowsOfPixels)
+    const outputRGBdata: number[] = convertPixelArrayTo1DArray(filteredRowsOfPixels)
     
-    const outputBMPData = inputBMPData
+    const outputBMPData: DecodedBMP = inputBMPData
     outputBMPData.data = outputRGBdata
 
-    const outputBMPBuffer = bmp.encode(outputBMPData)
-    fs.writeFileSync('output.bmp', outputBMPBuffer.data)
+    const outputBMPBuffer: Buffer = bmp.encode(outputBMPData).data
+    fs.writeFileSync('output.bmp', outputBMPBuffer)
 }
+
+
 
 interface Pixel {
     a: number,
@@ -64,10 +63,10 @@ interface DecodedBMP {
 function bmpDataToRowsOfPixels(bmpData: DecodedBMP): Pixel[][] {
     let rowsOfPixels: Pixel[][] = []
 
-    const VALUES_PER_PIXEL = 4
-    for (let y = 0; y < bmpData.height; y++) {
+    const VALUES_PER_PIXEL: number = 4
+    for (let y: number = 0; y < bmpData.height; y++) {
         let row: Pixel[] = []
-        for (let x = 0; x < bmpData.width * VALUES_PER_PIXEL; x += VALUES_PER_PIXEL) {
+        for (let x: number = 0; x < bmpData.width * VALUES_PER_PIXEL; x += VALUES_PER_PIXEL) {
             const location = y * bmpData.width * VALUES_PER_PIXEL + x
             let pixel: Pixel = {
                 a: bmpData.data[location],
@@ -106,27 +105,27 @@ const filterSpecs: Record <string, FilterDescriptor> = {
 }
 
 function edgeDetection (inputImage: Pixel[][]): Pixel[][] {
-    const gy_image = applyKernel([
+    const gy_image: Pixel[][] = applyKernel([
         [1, 2, 1],
         [0, 0, 0],
         [-1, -2, 1]
     ], inputImage)
     
 
-    const gx_image = applyKernel([
+    const gx_image: Pixel[][] = applyKernel([
         [1, 0, -1],
         [2, 0, -2],
         [1, 0, -1]
     ], inputImage)
    
-    const height = inputImage.length
-    const width = inputImage[0].length
+    const height: number = inputImage.length
+    const width: number = inputImage[0].length
 
     let outputImage: Pixel[][] = []
 
-    for (let y = 0; y < height; y++) {
+    for (let y: number = 0; y < height; y++) {
         let row: Pixel[] = []
-        for (let x = 0; x < width; x++) {
+        for (let x: number = 0; x < width; x++) {
             const pixel: Pixel = {
                 a: 0,
                 r: Math.sqrt(Math.pow(gx_image[y][x].r, 2) + Math.pow(gy_image[y][x].r, 2)),
@@ -146,12 +145,12 @@ function coloringBook (inputImage: Pixel[][]): Pixel[][] {
 
     outputImage = greyScale(outputImage)
     outputImage = edgeDetection(outputImage)
-    const height = outputImage.length
-    const width = outputImage[0].length
+    const height: number = outputImage.length
+    const width: number = outputImage[0].length
 
-    for (let y = 0; y < height; y++) {
-        for (let x = 0; x < width; x++) {
-            let valueSplit = 50
+    for (let y: number = 0; y < height; y++) {
+        for (let x: number = 0; x < width; x++) {
+            let valueSplit: number = 50
             outputImage[y][x].r = outputImage[y][x].r > valueSplit ? 0 : 255
             outputImage[y][x].g = outputImage[y][x].g > valueSplit ? 0 : 255
             outputImage[y][x].b = outputImage[y][x].b > valueSplit ? 0 : 255
@@ -162,16 +161,16 @@ function coloringBook (inputImage: Pixel[][]): Pixel[][] {
 }
 
 
-function gaussianBlur(inputImage: Pixel[][]) {
-    const outputImage = applyKernel([[1, 2, 1], [2, 4, 2], [1, 2, 1]], inputImage)
+function gaussianBlur(inputImage: Pixel[][]): Pixel[][] {
+    const outputImage: Pixel[][] = applyKernel([[1, 2, 1], [2, 4, 2], [1, 2, 1]], inputImage)
     return outputImage
 }
 
-function greyScale(inputImage: Pixel[][]) {
-    const outputImage = JSON.parse(JSON.stringify(inputImage))
-    for (let y = 0; y < outputImage.length; y++) {
-        for (let x = 0; x < outputImage[y].length; x++) {
-            const averageOfColours = (outputImage[y][x].r + outputImage[y][x].g + outputImage[y][x].b) / 3
+function greyScale(inputImage: Pixel[][]): Pixel[][] {
+    const outputImage: Pixel[][] = JSON.parse(JSON.stringify(inputImage))
+    for (let y: number = 0; y < outputImage.length; y++) {
+        for (let x: number = 0; x < outputImage[y].length; x++) {
+            const averageOfColours: number = (outputImage[y][x].r + outputImage[y][x].g + outputImage[y][x].b) / 3
             outputImage[y][x].a = 0
             outputImage[y][x].r = averageOfColours
             outputImage[y][x].g = averageOfColours
@@ -182,11 +181,11 @@ function greyScale(inputImage: Pixel[][]) {
 }
 
 function applyKernel(kernel: number[][], inputImage: Pixel[][]) {
-    const height = inputImage.length
-    const width = inputImage[0].length
+    const height: number = inputImage.length
+    const width: number = inputImage[0].length
 
-    const kernelSize = kernel.length
-    const kernelOffset = (kernelSize - 1) / 2
+    const kernelSize: number = kernel.length
+    const kernelMiddle: number = (kernelSize - 1) / 2
 
     let kernelTotal: number = 0;
     kernel.forEach((row) => {
@@ -201,23 +200,21 @@ function applyKernel(kernel: number[][], inputImage: Pixel[][]) {
         throw new Error("Invalid kernel size")
     }
 
-    console.log(kernel)
-
     let output: Pixel[][] = []
 
-    for (let y = 0; y < height; y++) {
+    for (let y: number = 0; y < height; y++) {
         let row: Pixel[] = []
-        for (let x = 0; x < width; x++) {
+        for (let x: number = 0; x < width; x++) {
             const pixel: Pixel = {
                 a: 0,
                 r: 0,
                 g: 0,
                 b: 0
             }
-            for (let i = -kernelOffset; i <= kernelOffset; i++) {
-                for (let j = -kernelOffset; j <= kernelOffset; j++) {
-                    const yKernelPos = (y + i + height) % height;
-                    const xKernelPos = (x + j + width) % width;
+            for (let i: number = -kernelMiddle; i <= kernelMiddle; i++) {
+                for (let j: number = -kernelMiddle; j <= kernelMiddle; j++) {
+                    const yKernelPos: number = (y + i + height) % height;
+                    const xKernelPos: number = (x + j + width) % width;
 
                     pixel.r += inputImage[yKernelPos][xKernelPos].r * kernel[j + 1][i + 1] / kernelTotal;
                     pixel.g += inputImage[yKernelPos][xKernelPos].g * kernel[j + 1][i + 1] / kernelTotal;
@@ -235,11 +232,11 @@ function applyKernel(kernel: number[][], inputImage: Pixel[][]) {
 // CONVERT FILTERED 2D ARRAY TO A 1D ARRAY
 function convertPixelArrayTo1DArray(rowsOfPixels: Pixel[][]) {
     let data: number[] = []
-    const height = rowsOfPixels.length
-    const width = rowsOfPixels[0].length
+    const height: number = rowsOfPixels.length
+    const width: number = rowsOfPixels[0].length
 
-    for (let y = 0; y < height; y++) {
-        for (let x = 0; x < width; x ++) {
+    for (let y: number = 0; y < height; y++) {
+        for (let x: number = 0; x < width; x ++) {
             data.push (
                 rowsOfPixels[y][x].a,
                 rowsOfPixels[y][x].b, 
