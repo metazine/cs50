@@ -11,7 +11,7 @@ function main() {
     
     let filteredImage: Pixel[][];
     
-    filteredImage = runFilter(filterName, rowsOfPixels)
+    filteredImage = filter(filterName, rowsOfPixels)
 
     const outputRGBdata: number[] = convertPixelArrayTo1DArray(filteredImage)
     
@@ -76,7 +76,7 @@ function bmpDataToRowsOfPixels(bmpData: DecodedBMP): Pixel[][] {
 
 
 // FILTER FUNCTIONS
-function runFilter(filterName: string, inputImage: Pixel[][]) {
+function filter(filterName: string, inputImage: Pixel[][]) {
     try {
         return filterSpecs[filterName].function(inputImage)
     } 
