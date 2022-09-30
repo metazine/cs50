@@ -1,26 +1,19 @@
 const fs = require('fs')
 const bmp = require('bmp-js')
-
 function main() {
     // LOAD IN BMP
     const inputBMPBuffer: Buffer = fs.readFileSync(process.argv[3])
-
+    const filterName = (process.argv[2])
     const inputBMPData: DecodedBMP = bmp.decode(inputBMPBuffer)
 
 
     const rowsOfPixels: Pixel[][] = bmpDataToRowsOfPixels(inputBMPData)
     
-    let filteredRowsOfPixels: Pixel[][];
+    let filteredImage: Pixel[][];
     
-    try {
-        filteredRowsOfPixels = filterSpecs[process.argv[2]].function(rowsOfPixels)
-    } 
-    catch {
-        console.log(`Unknown filter: "${process.argv[2]}"`)
-        process.exit(1)
-    }
-    
-    const outputRGBdata: number[] = convertPixelArrayTo1DArray(filteredRowsOfPixels)
+    filteredImage = runFilter(filterName, rowsOfPixels)
+
+    const outputRGBdata: number[] = convertPixelArrayTo1DArray(filteredImage)
     
     const outputBMPData: DecodedBMP = inputBMPData
     outputBMPData.data = outputRGBdata
@@ -28,7 +21,6 @@ function main() {
     const outputBMPBuffer: Buffer = bmp.encode(outputBMPData).data
     fs.writeFileSync('output.bmp', outputBMPBuffer)
 }
-
 
 
 interface Pixel {
@@ -84,6 +76,16 @@ function bmpDataToRowsOfPixels(bmpData: DecodedBMP): Pixel[][] {
 
 
 // FILTER FUNCTIONS
+function runFilter(filterName: string, inputImage: Pixel[][]) {
+    try {
+        return filterSpecs[filterName].function(inputImage)
+    } 
+    catch {
+        console.log(`Unknown filter: "${filterName}"`)
+        process.exit(1)
+    }
+}
+
 interface FilterDescriptor {
     function: Function,
 }
