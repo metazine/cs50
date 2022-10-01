@@ -1,25 +1,19 @@
 const fs = require('fs')
 const bmp = require('bmp-js')
 function main() {
+    const fileName = process.argv[3]
+    const filterType = process.argv[2]
+    
     // LOAD IN BMP
-    const inputBMPBuffer: Buffer = fs.readFileSync(process.argv[3])
-    const filterName = (process.argv[2])
-    const inputBMPData: DecodedBMP = bmp.decode(inputBMPBuffer)
+    const inputBMPBuffer: Buffer = fs.readFileSync(fileName)
+    const BMPData: DecodedBMP = bmp.decode(inputBMPBuffer)
 
 
-    const rowsOfPixels: Pixel[][] = bmpDataToRowsOfPixels(inputBMPData)
+    const image: Pixel[][] = bmpDataToImage(BMPData)
+    const filteredImage: Pixel[][] = filter(filterType, image)
+    BMPData.data= convertImageTo1DArray(filteredImage)
     
-    let filteredImage: Pixel[][];
-    
-    filteredImage = filter(filterName, rowsOfPixels)
-
-    const outputRGBdata: number[] = convertPixelArrayTo1DArray(filteredImage)
-    
-    const outputBMPData: DecodedBMP = inputBMPData
-    outputBMPData.data = outputRGBdata
-
-    const outputBMPBuffer: Buffer = bmp.encode(outputBMPData).data
-    fs.writeFileSync('output.bmp', outputBMPBuffer)
+    fs.writeFileSync('output.bmp', bmp.encode(BMPData).data)
 }
 
 
@@ -52,7 +46,7 @@ interface DecodedBMP {
 
 
 // CONVERT BMP TO TWO DIMENSIONAL ARRAY
-function bmpDataToRowsOfPixels(bmpData: DecodedBMP): Pixel[][] {
+function bmpDataToImage(bmpData: DecodedBMP): Pixel[][] {
     let rowsOfPixels: Pixel[][] = []
 
     const VALUES_PER_PIXEL: number = 4
@@ -232,7 +226,7 @@ function applyKernel(kernel: number[][], inputImage: Pixel[][]) {
 }
 
 // CONVERT FILTERED 2D ARRAY TO A 1D ARRAY
-function convertPixelArrayTo1DArray(rowsOfPixels: Pixel[][]) {
+function convertImageTo1DArray(rowsOfPixels: Pixel[][]) {
     let data: number[] = []
     const height: number = rowsOfPixels.length
     const width: number = rowsOfPixels[0].length
