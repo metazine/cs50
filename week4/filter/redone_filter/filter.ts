@@ -1,5 +1,6 @@
 const fs = require('fs')
 const bmp = require('bmp-js')
+
 function main() {
     const fileName = process.argv[3]
     const filterType = process.argv[2]
@@ -7,7 +8,6 @@ function main() {
     // LOAD IN BMP
     const inputBMPBuffer: Buffer = fs.readFileSync(fileName)
     const BMPData: DecodedBMP = bmp.decode(inputBMPBuffer)
-
 
     const image: Pixel[][] = bmpDataToImage(BMPData)
     const filteredImage: Pixel[][] = filter(filterType, image)
@@ -42,19 +42,17 @@ interface DecodedBMP {
     data: number[]
 }
 
-
-
-
 // CONVERT BMP TO TWO DIMENSIONAL ARRAY
 function bmpDataToImage(bmpData: DecodedBMP): Pixel[][] {
-    let rowsOfPixels: Pixel[][] = []
+    let image: Pixel[][] = []
+    const VALUES_PER_PIXEL: number = 4 //
 
-    const VALUES_PER_PIXEL: number = 4
     for (let y: number = 0; y < bmpData.height; y++) {
         let row: Pixel[] = []
         for (let x: number = 0; x < bmpData.width * VALUES_PER_PIXEL; x += VALUES_PER_PIXEL) {
             const location = y * bmpData.width * VALUES_PER_PIXEL + x
             let pixel: Pixel = {
+                // BMP files are stored as abgr
                 a: bmpData.data[location],
                 r: bmpData.data[location + 3],
                 g: bmpData.data[location + 2],
@@ -62,12 +60,10 @@ function bmpDataToImage(bmpData: DecodedBMP): Pixel[][] {
             }
             row.push(pixel)
         }
-        rowsOfPixels.push(row)
+        image.push(row)
     }
-    return rowsOfPixels
+    return image
 }
-
-
 
 // FILTER FUNCTIONS
 function filter(filterName: string, inputImage: Pixel[][]) {
@@ -81,7 +77,7 @@ function filter(filterName: string, inputImage: Pixel[][]) {
 }
 
 interface FilterDescriptor {
-    function: Function,
+    function: Function
 }
 
 const filterSpecs: Record <string, FilterDescriptor> = {
@@ -106,7 +102,6 @@ function edgeDetection (inputImage: Pixel[][]): Pixel[][] {
         [0, 0, 0],
         [-1, -2, -1]
     ], inputImage)
-    
 
     const gx_image: Pixel[][] = applyKernel([
         [1, 0, -1],
@@ -132,7 +127,6 @@ function edgeDetection (inputImage: Pixel[][]): Pixel[][] {
         }
         outputImage.push(row)
     }
-
     return outputImage
 }
 
@@ -141,6 +135,7 @@ function coloringBook (inputImage: Pixel[][]): Pixel[][] {
 
     outputImage = greyScale(outputImage)
     outputImage = edgeDetection(outputImage)
+    
     const height: number = outputImage.length
     const width: number = outputImage[0].length
 
@@ -158,8 +153,7 @@ function coloringBook (inputImage: Pixel[][]): Pixel[][] {
 
 
 function gaussianBlur(inputImage: Pixel[][]): Pixel[][] {
-    const outputImage: Pixel[][] = applyKernel([[1, 2, 1], [2, 4, 2], [1, 2, 1]], inputImage)
-    return outputImage
+    return applyKernel([[1, 2, 1], [2, 4, 2], [1, 2, 1]], inputImage) 
 }
 
 function greyScale(inputImage: Pixel[][]): Pixel[][] {
@@ -242,9 +236,6 @@ function convertImageTo1DArray(rowsOfPixels: Pixel[][]) {
         }
     }
     return data
-
-
 }
-// OUTPUT BMP
 
 main()
