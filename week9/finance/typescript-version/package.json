@@ -1,0 +1,23 @@
+{
+  "name": "finance",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/metazine/cs50.git"
+  },
+  "author": "metazine",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/metazine/cs50/issues"
+  },
+  "homepage": "https://github.com/metazine/cs50#readme",
+  "dependencies": {
+    "@types/node": "^18.8.2",
+    "typescript": "^4.8.4"
+  }
+}
