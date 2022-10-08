@@ -109,7 +109,7 @@ function edgeDetection (inputImage: Image): Image {
     ], inputImage)
    
     const height: number = inputImage.length
-    const width: number = inputImage[0].length
+    const width: number = inputImage[0]?.length || 0
 
     let outputImage: Image = []
 
@@ -118,9 +118,9 @@ function edgeDetection (inputImage: Image): Image {
         for (let x: number = 0; x < width; x++) {
             const pixel: Pixel = {
                 a: 0,
-                r: Math.sqrt(Math.pow(gx_image[y][x].r, 2) + Math.pow(gy_image[y][x].r, 2)),
-                g: Math.sqrt(Math.pow(gx_image[y][x].g, 2) + Math.pow(gy_image[y][x].g, 2)),
-                b: Math.sqrt(Math.pow(gx_image[y][x].b, 2) + Math.pow(gy_image[y][x].b, 2))
+                r: Math.sqrt(Math.pow(gx_image[y]?.[x].r, 2) + Math.pow(gy_image[y][x].r, 2)),
+                g: Math.sqrt(Math.pow(gx_image[y]?[x].g, 2) + Math.pow(gy_image[y][x].g, 2)),
+                b: Math.sqrt(Math.pow(gx_image[y]?[x].b, 2) + Math.pow(gy_image[y][x].b, 2))
             }
             row.push(pixel)
         }
@@ -174,10 +174,9 @@ function greyScale(inputImage: Image): Image {
     return outputImage
 }
 
-function applyKernel(kernel: number[][], inputImage: Pixel[][]) {
+function applyKernel(kernel: number[][], inputImage: Image) {
     const height: number = inputImage.length
-    const width: number = inputImage[0].length
-
+    const width: number = inputImage[0]?.length || 0
     const kernelSize: number = kernel.length
     const kernelMiddle: number = (kernelSize - 1) / 2
 
@@ -209,10 +208,22 @@ function applyKernel(kernel: number[][], inputImage: Pixel[][]) {
                 for (let j: number = -kernelMiddle; j <= kernelMiddle; j++) {
                     const yKernelPos: number = (y + i + height) % height;
                     const xKernelPos: number = (x + j + width) % width;
+                    
+                    const kernelPosPixel: Pixel | undefined = inputImage[yKernelPos]?.[xKernelPos]
+                    const kernelValue: number | undefined = kernel[j + 1]?.[i + 1]
 
-                    pixel.r += inputImage[yKernelPos][xKernelPos].r * kernel[j + 1][i + 1] / kernelTotal;
-                    pixel.g += inputImage[yKernelPos][xKernelPos].g * kernel[j + 1][i + 1] / kernelTotal;
-                    pixel.b += inputImage[yKernelPos][xKernelPos].b * kernel[j + 1][i + 1] / kernelTotal;
+                    if (!kernelValue) {
+                        console.log("No kernel value given")
+                        process.exit(1)
+                    }
+                    if (!kernelPosPixel) {
+                        console.log("Image array is invalid")
+                        process.exit(1)
+                    }
+
+                    pixel.r += kernelPosPixel.r * kernelValue / kernelTotal;
+                    pixel.g += kernelPosPixel.g * kernelValue / kernelTotal;
+                    pixel.b += kernelPosPixel.b * kernelValue / kernelTotal;
                 }
             }
             row.push(pixel)
