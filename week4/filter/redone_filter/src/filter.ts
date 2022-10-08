@@ -112,15 +112,23 @@ function edgeDetection (inputImage: Image): Image {
     const width: number = inputImage[0]?.length || 0
 
     let outputImage: Image = []
-
+    
     for (let y: number = 0; y < height; y++) {
         let row: Pixel[] = []
         for (let x: number = 0; x < width; x++) {
+            const gxPixel: Pixel | undefined = gx_image[y]?.[x]
+            const gyPixel: Pixel | undefined = gy_image[y]?.[x]
+            
+            if (!gxPixel || !gyPixel) {
+                console.log("Image array is not 2 dimensional")
+                process.exit(1)
+            }
+
             const pixel: Pixel = {
                 a: 0,
-                r: Math.sqrt(Math.pow(gx_image[y]?.[x].r, 2) + Math.pow(gy_image[y][x].r, 2)),
-                g: Math.sqrt(Math.pow(gx_image[y]?[x].g, 2) + Math.pow(gy_image[y][x].g, 2)),
-                b: Math.sqrt(Math.pow(gx_image[y]?[x].b, 2) + Math.pow(gy_image[y][x].b, 2))
+                r: Math.sqrt(Math.pow(gxPixel.r, 2) + Math.pow(gyPixel.r, 2)),
+                g: Math.sqrt(Math.pow(gxPixel.g, 2) + Math.pow(gyPixel.g, 2)),
+                b: Math.sqrt(Math.pow(gxPixel.b, 2) + Math.pow(gyPixel.b, 2))
             }
             row.push(pixel)
         }
