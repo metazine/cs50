@@ -70,14 +70,6 @@ function bmpDataToImage(bmpData: DecodedBMP): Image {
 
 // FILTER FUNCTIONS
 function filter(filterName: string, inputImage: Image) {
-    // try {
-    //     return filterSpecs[filterName].function(inputImage)
-    // } 
-    // catch {
-    //     console.log(`Unknown filter: "${filterName}"`)
-    //     process.exit(1)
-    // }
-
     const filterFunction: Function | undefined = filterSpecs[filterName]
     if (filterFunction) {
         return filterFunction(inputImage)
@@ -112,7 +104,7 @@ function edgeDetection (inputImage: Image): Image {
     const width: number = inputImage[0]?.length || 0
 
     let outputImage: Image = []
-    
+
     for (let y: number = 0; y < height; y++) {
         let row: Pixel[] = []
         for (let x: number = 0; x < width; x++) {
@@ -144,14 +136,31 @@ function coloringBook (inputImage: Image): Image {
     outputImage = edgeDetection(outputImage)
     
     const height: number = outputImage.length
-    const width: number = outputImage[0].length
+    const width: number = outputImage[0]?.length || 0
 
     for (let y: number = 0; y < height; y++) {
         for (let x: number = 0; x < width; x++) {
             let valueSplit: number = 50
-            outputImage[y][x].r = outputImage[y][x].r > valueSplit ? 0 : 255
-            outputImage[y][x].g = outputImage[y][x].g > valueSplit ? 0 : 255
-            outputImage[y][x].b = outputImage[y][x].b > valueSplit ? 0 : 255
+            const pixel: Pixel | undefined = outputImage[y]?.[x] || undefined
+
+            if (!pixel) {
+                console.log("pixel array is not two dimensional")
+                process.exit(1)
+            }
+            if(!outputImage[y]?.[x]) {
+                console.log("outputImage is not two dimensional")
+                process.exit(1)
+            }
+            
+            
+
+            pixel.r = pixel.r > valueSplit ? 0 : 255
+            pixel.g = pixel.g > valueSplit ? 0 : 255
+            pixel.b = pixel.b > valueSplit ? 0 : 255
+            
+            //@ts-ignore
+            outputImage[y][x] = pixel
+
         }
     }
     outputImage = gaussianBlur(outputImage)
@@ -166,17 +175,25 @@ function gaussianBlur(inputImage: Pixel[][]): Pixel[][] {
 function greyScale(inputImage: Image): Image {
     const outputImage: Image = deepCopyImage(inputImage)
 
-    if (outputImage[0][0] === undefined) {
+    if (!outputImage[0]?.[0]) {
         process.exit(1)
     }
 
     for (let y: number = 0; y < outputImage.length; y++) {
-        for (let x: number = 0; x < outputImage[y].length; x++) {
-            const averageOfColours: number = (outputImage[y][x].r + outputImage[y][x].g + outputImage[y][x].b) / 3
-            outputImage[y][x].a = 0
-            outputImage[y][x].r = averageOfColours
-            outputImage[y][x].g = averageOfColours
-            outputImage[y][x].b = averageOfColours
+        for (let x: number = 0; x < (outputImage[y]?.length || 0); x++) {
+            const pixel: Pixel | undefined = outputImage[y]?.[x]
+
+            if (!pixel) {
+                console.log("outputImage is not a two dimensional array")
+                process.exit(1)
+            }
+            const averageOfColours: number = (pixel.r + pixel.g + pixel.b) / 3
+            pixel.r = averageOfColours
+            pixel.g = averageOfColours
+            pixel.b = averageOfColours
+            
+            //@ts-ignore
+            outputImage[y][x] = pixel
         }
     }
     return outputImage
@@ -247,18 +264,24 @@ function deepCopyImage(inputImage: Image): Image {
 }
 
 // CONVERT FILTERED 2D ARRAY TO A 1D ARRAY
-function convertImageTo1DArray(rowsOfPixels: Pixel[][]) {
+function convertImageTo1DArray(image: Image) {
     let data: number[] = []
-    const height: number = rowsOfPixels.length
-    const width: number = rowsOfPixels[0].length
+    const height: number = image.length
+    const width: number = image[0]?.length || 0
 
     for (let y: number = 0; y < height; y++) {
         for (let x: number = 0; x < width; x ++) {
+            const pixel: Pixel | undefined = image[y]?.[x]
+            if (!pixel) {
+                console.log("Image is not two dimensional array")
+                process.exit(1)
+            }
+
             data.push (
-                rowsOfPixels[y][x].a,
-                rowsOfPixels[y][x].b, 
-                rowsOfPixels[y][x].g, 
-                rowsOfPixels[y][x].r
+                pixel.a,
+                pixel.b, 
+                pixel.g, 
+                pixel.r
             )
         }
     }
