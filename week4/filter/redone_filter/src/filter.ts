@@ -1,19 +1,20 @@
-const fs = require('fs')
-const bmp = require('bmp-js')
+
+import {readFileSync, writeFileSync} from "fs";
+import {bmp as bmpJs} from "bmp-js"
 
 function main() {
-    const fileName = process.argv[3]
-    const filterType = process.argv[2]
+    const fileName: string = process.argv[3] || "Undefined"
+    const filterType: string = process.argv[2] || "undefined"
     
     // LOAD IN BMP
-    const inputBMPBuffer: Buffer = fs.readFileSync(fileName)
-    const BMPData: DecodedBMP = bmp.decode(inputBMPBuffer)
+    const inputBMPBuffer: Buffer = readFileSync(fileName)
+    const BMPData: DecodedBMP = bmpJs.decode(inputBMPBuffer)
 
     const image: Pixel[][] = bmpDataToImage(BMPData)
     const filteredImage: Pixel[][] = filter(filterType, image)
     BMPData.data= convertImageTo1DArray(filteredImage)
     
-    fs.writeFileSync('output.bmp', bmp.encode(BMPData).data)
+    writeFileSync('output.bmp', bmpJs.encode(BMPData).data)
 }
 
 
@@ -53,10 +54,10 @@ function bmpDataToImage(bmpData: DecodedBMP): Pixel[][] {
             const location = y * bmpData.width * VALUES_PER_PIXEL + x
             let pixel: Pixel = {
                 // BMP files are stored as abgr
-                a: bmpData.data[location],
-                r: bmpData.data[location + 3],
-                g: bmpData.data[location + 2],
-                b: bmpData.data[location + 1]
+                a: bmpData.data[location] || NaN, // alpha (opacity)
+                r: bmpData.data[location + 3] || NaN, // red
+                g: bmpData.data[location + 2] || NaN, // green
+                b: bmpData.data[location + 1] || NaN // blue
             }
             row.push(pixel)
         }
@@ -76,24 +77,11 @@ function filter(filterName: string, inputImage: Pixel[][]) {
     }
 }
 
-interface FilterDescriptor {
-    function: Function
-}
-
-const filterSpecs: Record <string, FilterDescriptor> = {
-    "-g": {
-        function: greyScale
-        //function: greyScale
-    },
-    "-e": {
-        function: edgeDetection
-    },
-    "-c": {
-        function: coloringBook
-    },
-    "-gb": {
-        function: gaussianBlur
-    }
+const filterSpecs: Record <string, Function> = {
+    "-g": greyScale,
+    "-e": edgeDetection,
+    "-c": coloringBook,
+    "-gb": gaussianBlur
 }
 
 function edgeDetection (inputImage: Pixel[][]): Pixel[][] {
