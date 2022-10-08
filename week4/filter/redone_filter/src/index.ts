@@ -1,6 +1,6 @@
 
 import {readFileSync, writeFileSync} from "fs";
-import {bmp as bmpJs} from "bmp-js"
+const bmpJs = require('bmp-js')
 
 function main() {
     const fileName: string = process.argv[3] || "-g"
