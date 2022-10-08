@@ -8,10 +8,10 @@ function main() {
     
     // LOAD IN BMP
     const inputBMPBuffer: Buffer = readFileSync(fileName)
-    const BMPData: DecodedBMP = bmpJs.decode(inputBMPBuffer)
+    const BMPData: Bmp = bmpJs.decode(inputBMPBuffer)
 
-    const image: Pixel[][] = bmpDataToImage(BMPData)
-    const filteredImage: Pixel[][] = filter(filterType, image)
+    const image: Image = bmpDataToImage(BMPData)
+    const filteredImage: Image = filter(filterType, image)
     BMPData.data = convertImageTo1DArray(filteredImage)
     
     writeFileSync('output.bmp', bmpJs.encode(BMPData).data)
@@ -27,14 +27,14 @@ interface Pixel {
 
 type Image = Pixel[][]
 
-interface DecodedBMP {
+interface Bmp {
     width: number,
     height: number,
     data: number[]
 }
 
 // CONVERT BMP TO TWO DIMENSIONAL ARRAY
-function bmpDataToImage(bmpData: DecodedBMP): Image {
+function bmpDataToImage(bmpData: Bmp): Image {
     let image: Image = []
     const VALUES_PER_PIXEL: number = 4 //
 
