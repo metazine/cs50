@@ -3,8 +3,8 @@ import {readFileSync, writeFileSync} from "fs";
 import {bmp as bmpJs} from "bmp-js"
 
 function main() {
-    const fileName: string = process.argv[3] || "Undefined"
-    const filterType: string = process.argv[2] || "undefined"
+    const fileName: string = process.argv[3] || "-g"
+    const filterType: string = process.argv[2] || "test/images/input.bmp"
     
     // LOAD IN BMP
     const inputBMPBuffer: Buffer = readFileSync(fileName)
@@ -25,6 +25,8 @@ interface Pixel {
     b: number
 }
 
+type Image = Pixel[][]
+
 interface DecodedBMP {
     fileSize: number,
     reserved: number,
@@ -44,8 +46,8 @@ interface DecodedBMP {
 }
 
 // CONVERT BMP TO TWO DIMENSIONAL ARRAY
-function bmpDataToImage(bmpData: DecodedBMP): Pixel[][] {
-    let image: Pixel[][] = []
+function bmpDataToImage(bmpData: DecodedBMP): Image {
+    let image: Image = []
     const VALUES_PER_PIXEL: number = 4 //
 
     for (let y: number = 0; y < bmpData.height; y++) {
@@ -67,11 +69,20 @@ function bmpDataToImage(bmpData: DecodedBMP): Pixel[][] {
 }
 
 // FILTER FUNCTIONS
-function filter(filterName: string, inputImage: Pixel[][]) {
-    try {
-        return filterSpecs[filterName].function(inputImage)
-    } 
-    catch {
+function filter(filterName: string, inputImage: Image) {
+    // try {
+    //     return filterSpecs[filterName].function(inputImage)
+    // } 
+    // catch {
+    //     console.log(`Unknown filter: "${filterName}"`)
+    //     process.exit(1)
+    // }
+
+    const filterFunction: Function | undefined = filterSpecs[filterName]
+    if (filterFunction) {
+        return filterFunction(inputImage)
+    }
+    else {
         console.log(`Unknown filter: "${filterName}"`)
         process.exit(1)
     }
@@ -84,14 +95,14 @@ const filterSpecs: Record <string, Function> = {
     "-gb": gaussianBlur
 }
 
-function edgeDetection (inputImage: Pixel[][]): Pixel[][] {
-    const gy_image: Pixel[][] = applyKernel([
+function edgeDetection (inputImage: Image): Image {
+    const gy_image: Image = applyKernel([
         [1, 2, 1],
         [0, 0, 0],
         [-1, -2, -1]
     ], inputImage)
 
-    const gx_image: Pixel[][] = applyKernel([
+    const gx_image: Image = applyKernel([
         [1, 0, -1],
         [2, 0, -2],
         [1, 0, -1]
@@ -100,7 +111,7 @@ function edgeDetection (inputImage: Pixel[][]): Pixel[][] {
     const height: number = inputImage.length
     const width: number = inputImage[0].length
 
-    let outputImage: Pixel[][] = []
+    let outputImage: Image = []
 
     for (let y: number = 0; y < height; y++) {
         let row: Pixel[] = []
@@ -118,8 +129,8 @@ function edgeDetection (inputImage: Pixel[][]): Pixel[][] {
     return outputImage
 }
 
-function coloringBook (inputImage: Pixel[][]): Pixel[][] {
-    let outputImage: Pixel[][] = JSON.parse(JSON.stringify(inputImage))
+function coloringBook (inputImage: Image): Image {
+    let outputImage: Image = deepCopyImage(inputImage)
 
     outputImage = greyScale(outputImage)
     outputImage = edgeDetection(outputImage)
@@ -144,8 +155,13 @@ function gaussianBlur(inputImage: Pixel[][]): Pixel[][] {
     return applyKernel([[1, 2, 1], [2, 4, 2], [1, 2, 1]], inputImage) 
 }
 
-function greyScale(inputImage: Pixel[][]): Pixel[][] {
-    const outputImage: Pixel[][] = JSON.parse(JSON.stringify(inputImage))
+function greyScale(inputImage: Image): Image {
+    const outputImage: Image = deepCopyImage(inputImage)
+
+    if (outputImage[0][0] === undefined) {
+        process.exit(1)
+    }
+
     for (let y: number = 0; y < outputImage.length; y++) {
         for (let x: number = 0; x < outputImage[y].length; x++) {
             const averageOfColours: number = (outputImage[y][x].r + outputImage[y][x].g + outputImage[y][x].b) / 3
@@ -205,6 +221,10 @@ function applyKernel(kernel: number[][], inputImage: Pixel[][]) {
     }
     return output
 
+}
+
+function deepCopyImage(inputImage: Image): Image {
+    return JSON.parse(JSON.stringify(inputImage))
 }
 
 // CONVERT FILTERED 2D ARRAY TO A 1D ARRAY
