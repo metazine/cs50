@@ -12,36 +12,24 @@ function main() {
 
     const image: Pixel[][] = bmpDataToImage(BMPData)
     const filteredImage: Pixel[][] = filter(filterType, image)
-    BMPData.data= convertImageTo1DArray(filteredImage)
+    BMPData.data = convertImageTo1DArray(filteredImage)
     
     writeFileSync('output.bmp', bmpJs.encode(BMPData).data)
 }
 
 
 interface Pixel {
-    a: number,
-    r: number,
-    g: number,
-    b: number
+    a: number, // alpha (opacity)
+    r: number, // red
+    g: number, // green
+    b: number // blue
 }
 
 type Image = Pixel[][]
 
 interface DecodedBMP {
-    fileSize: number,
-    reserved: number,
-    offset: number,
-    headerSize: number,
     width: number,
     height: number,
-    planes: number
-    bitPP: number,
-    compress: number,
-    rawSize: number,
-    hr: number,
-    vr: number,
-    colors: number,
-    importantColors: number,
     data: number[]
 }
 
@@ -55,11 +43,10 @@ function bmpDataToImage(bmpData: DecodedBMP): Image {
         for (let x: number = 0; x < bmpData.width * VALUES_PER_PIXEL; x += VALUES_PER_PIXEL) {
             const location = y * bmpData.width * VALUES_PER_PIXEL + x
             let pixel: Pixel = {
-                // BMP files are stored as abgr
-                a: bmpData.data[location] || NaN, // alpha (opacity)
-                r: bmpData.data[location + 3] || NaN, // red
-                g: bmpData.data[location + 2] || NaN, // green
-                b: bmpData.data[location + 1] || NaN // blue
+                a: bmpData.data[location] || NaN,     
+                r: bmpData.data[location + 3] || NaN, 
+                g: bmpData.data[location + 2] || NaN, 
+                b: bmpData.data[location + 1] || NaN  
             }
             row.push(pixel)
         }
