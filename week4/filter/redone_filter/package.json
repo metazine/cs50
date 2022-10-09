@@ -4,8 +4,8 @@
   "description": "Small program that applies basic filters to images",
   "main": "filter.js",
   "scripts": {
-    "dev": "tsc --watch **/*.ts",
-    "test": "node filter.js"
+    "dev": "tsc --watch --esModuleInterop **/*.ts",
+    "test": "node --test"
   },
   "author": "metazine",
   "license": "ISC",
