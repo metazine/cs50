@@ -8,13 +8,13 @@ function main() {
     
     // LOAD IN BMP
     const inputBMPBuffer: Buffer = readFileSync(fileName)
-    const BMPData: Bmp = bmpJs.decode(inputBMPBuffer)
+    const bmp: Bmp = bmpJs.decode(inputBMPBuffer)
 
-    const image: Image = bmpDataToImage(BMPData)
+    const image: Image = bmpDataToImage(bmp)
     const filteredImage: Image = filter(filterType, image)
-    BMPData.data = convertImageTo1DArray(filteredImage)
+    bmp.data = convertImageTo1DArray(filteredImage)
     
-    writeFileSync('output.bmp', bmpJs.encode(BMPData).data)
+    writeFileSync('output.bmp', bmpJs.encode(bmp).data)
 }
 
 
