@@ -2,9 +2,9 @@
 import {readFileSync, writeFileSync} from "fs";
 const bmpJs = require('bmp-js')
 
-function main() {
-    const filterType: string = process.argv[2] || "test/images/input.bmp"
-    const fileName: string = process.argv[3] || "-g"
+export default function main(argv: string[]) {
+    const filterType: string = argv[2] || "-g"
+    const fileName: string = argv[3] || "test/images/input.bmp"
     
     // LOAD IN BMP
     const inputBMPBuffer: Buffer = readFileSync(fileName)
@@ -15,6 +15,7 @@ function main() {
     bmp.data = convertImageTo1DArray(filteredImage)
     
     writeFileSync('output.bmp', bmpJs.encode(bmp).data)
+    return bmp
 }
 
 
@@ -275,4 +276,4 @@ function convertImageTo1DArray(image: Image) {
     return data
 }
 
-main()
+main(process.argv)
