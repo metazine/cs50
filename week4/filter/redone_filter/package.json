@@ -4,7 +4,7 @@
   "description": "Small program that applies basic filters to images",
   "main": "filter.js",
   "scripts": {
-    "dev": "tsc --watch ./src/*.ts",
+    "dev": "tsc --watch **/*.ts",
     "test": "node filter.js"
   },
   "author": "metazine",
