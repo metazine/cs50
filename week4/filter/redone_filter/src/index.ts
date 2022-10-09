@@ -3,8 +3,8 @@ import {readFileSync, writeFileSync} from "fs";
 const bmpJs = require('bmp-js')
 
 function main() {
-    const fileName: string = process.argv[3] || "-g"
     const filterType: string = process.argv[2] || "test/images/input.bmp"
+    const fileName: string = process.argv[3] || "-g"
     
     // LOAD IN BMP
     const inputBMPBuffer: Buffer = readFileSync(fileName)
