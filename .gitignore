@@ -6,4 +6,5 @@ week4/filter/redone_filter/*.bmp
 week4/filter/redone_filter/*.jpeg
 week4/filter/redone_filter/test_images/*
 week9/finance/typescript-version/node_modules/*
-week4/filter/redone_filter/test/images/*
+week4/filter/redone_filter/test/images/output.jpeg
+week4/filter/redone_filter/test/images/output.bmp
