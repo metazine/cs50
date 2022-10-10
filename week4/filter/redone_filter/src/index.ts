@@ -1,20 +1,20 @@
+import {writeBuffer, readImageFile} from "./fileIO"
 
-import {readFileSync, writeFileSync} from "fs";
 const bmpJs = require('bmp-js')
 
 export default function main(argv: string[]) {
     const filterType: string = argv[2] || "-g"
-    const fileName: string = argv[3] || "test/images/input.bmp"
+    const path: string = argv[3] || "images/input.bmp"
     
     // LOAD IN BMP
-    const inputBMPBuffer: Buffer = readFileSync(fileName)
+    const inputBMPBuffer: Buffer = readImageFile(path)
     const bmp: Bmp = bmpJs.decode(inputBMPBuffer)
 
     const image: Image = bmpDataToImage(bmp)
     const filteredImage: Image = filter(filterType, image)
     bmp.data = convertImageTo1DArray(filteredImage)
     
-    writeFileSync('output.bmp', bmpJs.encode(bmp).data)
+    writeBuffer('output.bmp', bmpJs.encode(bmp).data)
     return bmp
 }
 
