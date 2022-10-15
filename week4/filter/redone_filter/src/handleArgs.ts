@@ -1,9 +1,6 @@
-interface argvDescriptor {
-    path: String,
-    filterName: String
-}
+import { ArgvDescriptor } from "./interfaces"
 
-export default function processArgs(argv: string[]): argvDescriptor {
+export default function processArgs(argv: string[]): ArgvDescriptor {
     if (argv.length !== 4) {
         throw new Error("Invalid Arg Count")
     }
@@ -17,7 +14,7 @@ export default function processArgs(argv: string[]): argvDescriptor {
         throw new Error("Path hasn't been given")
     } 
     
-    const argvSpecs: argvDescriptor = {
+    const argvSpecs: ArgvDescriptor = {
         filterName: filterName,
         path: path
     }
