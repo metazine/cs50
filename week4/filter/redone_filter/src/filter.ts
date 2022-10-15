@@ -1,5 +1,6 @@
 import { Image, Pixel } from "./interfaces"
 
+
 export default function filter(filterName: string, inputImage: Image) {
     const filterFunction: Function | undefined = filterSpecs[filterName]
     if (filterFunction) {

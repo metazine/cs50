@@ -1,4 +1,4 @@
-import { ArgvDescriptor } from "./interfaces"
+import {ArgvDescriptor} from "./interfaces"
 
 export default function processArgs(argv: string[]): ArgvDescriptor {
     if (argv.length !== 4) {

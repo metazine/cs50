@@ -11,7 +11,7 @@ describe("Handle Command Line Args",() => {
         expect(handleArgs(testArgs)).toBeTruthy()
     })
 
-    it("Returns the name of the filter", () => {
+    it("Returns an object with the args", () => {
         const testArgs = ["node", "index.js", "filterName", "path"]
         const expectedOutput = {
             filterName: "filterName",
