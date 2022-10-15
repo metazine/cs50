@@ -5,5 +5,4 @@ describe("Handle Command Line Args",() => {
         const testArgs = ["not", ""]
         expect(() => {handleArgs(testArgs)}).toThrow(/Invalid Arg Count/)  
     })
-    
 })
