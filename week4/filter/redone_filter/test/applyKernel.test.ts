@@ -5,6 +5,6 @@ import testImage from "./testImage"
 describe("Apply kernel", () => {
     it("Applies a kernel to an image", () => {
         const realOutput: Image = applyKernel(testImage.kernel, testImage.input)
-        expect(realOutput).toStrictEqual(testImage.expectedOutput)
+        expect(realOutput).toStrictEqual(testImage.kernelExpectedOutput)
     })
 })
