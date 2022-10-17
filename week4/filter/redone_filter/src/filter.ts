@@ -7,16 +7,15 @@ export default function filter(filterName: string, inputImage: Image) {
         return filterFunction(inputImage)
     }
     else {
-        console.log(`Unknown filter: "${filterName}"`)
-        process.exit(1)
+        throw new Error("Unknown filter type")
     }
 }
 
 const filterSpecs: Record <string, Function> = {
-    "g": greyScale,
-    "e": edgeDetection,
-    "c": coloringBook,
-    "gb": gaussianBlur
+    "greyscale": greyScale,
+    "edgeDetection": edgeDetection,
+    "coloringBook": coloringBook,
+    "gaussianBlur": gaussianBlur
 }
 
 function edgeDetection (inputImage: Image): Image {
@@ -44,8 +43,7 @@ function edgeDetection (inputImage: Image): Image {
             const gyPixel: Pixel | undefined = gy_image[y]?.[x]
             
             if (!gxPixel || !gyPixel) {
-                console.log("Image array is not 2 dimensional")
-                process.exit(1)
+                throw new Error("Image array is not 2 dimensional")
             }
 
             const pixel: Pixel = {
