@@ -12,6 +12,7 @@ describe("filter", () => {
     })
 
     it ("Runs edge detection filter properly", () => {
-        throw new Error(filter("edgeDetection", testImage.input))
+         throw new Error(filter("edgeDetection", testImage.input))
+        expect(12).toBe(12)
     })
 })
