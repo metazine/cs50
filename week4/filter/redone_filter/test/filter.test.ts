@@ -15,6 +15,9 @@ describe("filter", () => {
         expect(filter("edgeDetection", testImage.input)).toStrictEqual(testImage.edgeDetectionExpectedOutput)
     })
 
+    it ("Runs coloring book filter properly", () => {
+        expect(filter("coloringBook", testImage.input)).toStrictEqual(testImage.coloringBookExpectedOutput)
+    })
     it ("Runs gaussian blur filter properly", () => {
         expect(filter("gaussianBlur", testImage.input)).toStrictEqual(testImage.gaussianBlurExpectedOutput)
     })

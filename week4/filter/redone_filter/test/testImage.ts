@@ -36,12 +36,19 @@ const edgeDetectionExpectedOutput: Image = [
     [{"a": 0, "b": 75.8946638440411, "g": 75.8946638440411, "r": 75.8946638440411}, {"a": 0, "b": 86.53323061113575, "g": 86.53323061113575, "r": 86.53323061113575}, {"a": 0, "b": 75.8946638440411, "g": 75.8946638440411, "r": 75.8946638440411}]
 ]
 
+const coloringBookExpectedOutput: Image = [
+    [{"a": 0, "b": 0, "g": 0, "r": 0}, {"a": 0, "b": 0, "g": 0, "r": 0}, {"a": 0, "b": 0, "g": 0, "r": 0}], 
+    [{"a": 0, "b": 0, "g": 0, "r": 0}, {"a": 0, "b": 0, "g": 0, "r": 0}, {"a": 0, "b": 0, "g": 0, "r": 0}], 
+    [{"a": 0, "b": 0, "g": 0, "r": 0}, {"a": 0, "b": 0, "g": 0, "r": 0}, {"a": 0, "b": 0, "g": 0, "r": 0}]
+]
+
 const testImage = {
     input: inputImage,
     kernelExpectedOutput: kernelExpectedOutput,
     gaussianBlurExpectedOutput: gaussianBlurExpectedOutput,
     edgeDetectionExpectedOutput: edgeDetectionExpectedOutput,
     greyScaleExpectedOutput: greyScaleExpectedOutput,
+    coloringBookExpectedOutput: coloringBookExpectedOutput,
     kernel: testKernel
 }
 
