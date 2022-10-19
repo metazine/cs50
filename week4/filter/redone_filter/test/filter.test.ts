@@ -12,7 +12,10 @@ describe("filter", () => {
     })
 
     it ("Runs edge detection filter properly", () => {
-         throw new Error(filter("edgeDetection", testImage.input))
-        expect(12).toBe(12)
+        expect(filter("edgeDetection", testImage.input)).toStrictEqual(testImage.edgeDetectionExpectedOutput)
+    })
+
+    it ("Runs gaussian blur filter properly", () => {
+        expect(filter("gaussianBlur", testImage.input)).toStrictEqual(testImage.gaussianBlurExpectedOutput)
     })
 })
