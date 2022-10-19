@@ -36,12 +36,8 @@ export default function applyKernel(kernel: number[][], inputImage: Image) {
                     const xKernelPos: number = (x + j + width) % width;
                     
                     const kernelPosPixel: Pixel | undefined = inputImage[yKernelPos]?.[xKernelPos]
-                    const kernelValue: number | undefined = kernel[j + 1]?.[i + 1]
+                    const kernelValue: number = kernel[j + 1]?.[i + 1] || 0
 
-                    if (!kernelValue) {
-                        console.log("No kernel value given")
-                        process.exit(1)
-                    }
                     if (!kernelPosPixel) {
                         console.log("Image array is invalid")
                         process.exit(1)
