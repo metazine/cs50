@@ -21,7 +21,7 @@ export function bmpDataToImage(bmpData: Bmp): Image {
     return image
 }
 
-export function convertImageTo1DArray(image: Image) {
+export function convertImageToBmpData(image: Image) {
     let data: number[] = []
     const height: number = image.length
     const width: number = image[0]?.length || 0
