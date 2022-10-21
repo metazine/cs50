@@ -42,6 +42,14 @@ const coloringBookExpectedOutput: Image = [
     [{"a": 0, "b": 0, "g": 0, "r": 0}, {"a": 0, "b": 0, "g": 0, "r": 0}, {"a": 0, "b": 0, "g": 0, "r": 0}]
 ]
 
+const bmpFileImage: Image = [
+    [{"a": 255, "b": 155, "g": 175, "r": 210}, {"a": 255, "b": 156, "g": 176, "r": 211}, {"a": NaN, "b": 157, "g": NaN, "r": NaN}],
+    [{"a": 255, "b": 166, "g": 185, "r": 218}, {"a": 255, "b": 162, "g": 181, "r": 214}, {"a": 255, "b": 157, "g": 177, "r": 212}], 
+    [{"a": 255, "b": 168, "g": 185, "r": 218}, {"a": 255, "b": 170, "g": 187, "r": 220}, {"a": 255, "b": 171, "g": 188, "r": 221}]
+]
+
+const inputImageBmpData: number[] = [0,6,4,2,0,12,10,8,0,18,16,14,0,24,22,20,0,30,28,26,0,36,34,32,0,42,40,38,0,48,46,44,0,54,52,50]
+
 const testImage = {
     input: inputImage,
     kernelExpectedOutput: kernelExpectedOutput,
@@ -49,7 +57,9 @@ const testImage = {
     edgeDetectionExpectedOutput: edgeDetectionExpectedOutput,
     greyScaleExpectedOutput: greyScaleExpectedOutput,
     coloringBookExpectedOutput: coloringBookExpectedOutput,
-    kernel: testKernel
+    kernel: testKernel,
+    bmpFileImage: bmpFileImage,
+    inputImageBmpData: inputImageBmpData
 }
 
 export default testImage 
