@@ -4,7 +4,7 @@
   "description": "Small program that applies basic filters to images",
   "main": "filter.js",
   "scripts": {
-    "dev": "tsc --watch --esModuleInterop **/*.ts",
+    "build": "tsc",
     "test": "jest --watch --verbose"
   },
   "author": "metazine",
