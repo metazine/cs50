@@ -1,6 +1,6 @@
-import { Image, Pixel } from "./interfaces"
+import { Image, Pixel, Kernel } from "./interfaces"
 
-export default function applyKernel(kernel: number[][], inputImage: Image) {
+export default function applyKernel(kernel: Kernel, inputImage: Image) {
     const height: number = inputImage.length
     const width: number = inputImage[0]?.length || 0
     const kernelSize: number = kernel.length
