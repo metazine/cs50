@@ -27,7 +27,7 @@ export class PixelArrayImage implements Image {
         this.width = this.data[0]?.length || 0  
     }
     getPixel(x: number, y: number): Pixel {
-        let pixelValue: Pixel | undefined  = this.data[y]?.[x]
+        let pixelValue: Pixel | undefined  = this.data.at(y)?.at(x)
         if (pixelValue === undefined) {
             throw new Error(`Position ${x}, ${y} doesn't exist`)
         }

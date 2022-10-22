@@ -1,8 +1,6 @@
-import { Image, Pixel, Kernel } from "./interfaces"
+import { Image, Pixel, Kernel, PixelArrayImage } from "./interfaces"
 
-export default function applyKernel(kernel: Kernel, inputImage: Image) {
-    const height: number = inputImage.length
-    const width: number = inputImage[0]?.length || 0
+export default function applyKernel(kernel: Kernel, input: Image) {
     const kernelSize: number = kernel.length
     const kernelMiddle: number = (kernelSize - 1) / 2
 
@@ -19,11 +17,10 @@ export default function applyKernel(kernel: Kernel, inputImage: Image) {
         throw new Error("Invalid kernel size")
     }
 
-    let output: Image = []
+    let output = new PixelArrayImage(input.data)
 
-    for (let y: number = 0; y < height; y++) {
-        let row: Pixel[] = []
-        for (let x: number = 0; x < width; x++) {
+    for (let y: number = 0; y < input.height; y++) {
+        for (let x: number = 0; x < input.width; x++) {
             const pixel: Pixel = {
                 a: 0,
                 r: 0,
@@ -32,26 +29,20 @@ export default function applyKernel(kernel: Kernel, inputImage: Image) {
             }
             for (let i: number = -kernelMiddle; i <= kernelMiddle; i++) {
                 for (let j: number = -kernelMiddle; j <= kernelMiddle; j++) {
-                    const yKernelPos: number = (y + i + height) % height;
-                    const xKernelPos: number = (x + j + width) % width;
-                    
-                    const kernelPosPixel: Pixel | undefined = inputImage[yKernelPos]?.[xKernelPos]
+                    const relativePixel: Pixel | undefined = input.getPixel(x + j, y + i)
                     const kernelValue: number = kernel[j + 1]?.[i + 1] || 0
 
-                    if (!kernelPosPixel) {
-                        console.log("Image array is invalid")
-                        process.exit(1)
+                    if (relativePixel === undefined) {
+                        throw new Error("Image array is invalid")
                     }
-
-                    pixel.r += kernelPosPixel.r * kernelValue / kernelTotal;
-                    pixel.g += kernelPosPixel.g * kernelValue / kernelTotal;
-                    pixel.b += kernelPosPixel.b * kernelValue / kernelTotal;
+ 
+                    pixel.r += relativePixel.r * kernelValue / kernelTotal;
+                    pixel.g += relativePixel.g * kernelValue / kernelTotal;
+                    pixel.b += relativePixel.b * kernelValue / kernelTotal;
                 }
             }
-            row.push(pixel)
+            output.setPixel(x, y, pixel)
         }
-        output.push(row)
     }
     return output
-
 }

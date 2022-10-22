@@ -1,4 +1,4 @@
-import { Image, Pixel } from "./interfaces"
+import { Image, Pixel, PixelArrayImage } from "./interfaces"
 import applyKernel from "./applyKernel"
 
 export default function filter(filterName: string, inputImage: Image) {
@@ -18,29 +18,26 @@ const filterSpecs: Record <string, Function> = {
     "gaussianBlur": gaussianBlur
 }
 
-function edgeDetection (inputImage: Image): Image {
-    const gy_image: Image = applyKernel([
-        [1, 2, 1],
-        [0, 0, 0],
-        [-1, -2, -1]
-    ], inputImage)
-
-    const gx_image: Image = applyKernel([
+function edgeDetection (input: Image): Image {
+    const gyImage: Image = applyKernel([
         [1, 0, -1],
         [2, 0, -2],
         [1, 0, -1]
-    ], inputImage)
-   
-    const height: number = inputImage.length
-    const width: number = inputImage[0]?.length || 0
+    ], input)
 
-    let outputImage: Image = []
+    const gxImage: Image = applyKernel([
+        [1, 2, 1],
+        [0, 0, 0],
+        [-1, -2, -1]
+    ], input)
+   
+    let outputImage: Image = new PixelArrayImage(input)
 
     for (let y: number = 0; y < height; y++) {
         let row: Pixel[] = []
         for (let x: number = 0; x < width; x++) {
-            const gxPixel: Pixel | undefined = gx_image[y]?.[x]
-            const gyPixel: Pixel | undefined = gy_image[y]?.[x]
+            const gxPixel: Pixel | undefined = gxImage.getPixel(x, y)
+            const gyPixel: Pixel | undefined = gyImage.getPixel(x, y)
             
             if (!gxPixel || !gyPixel) {
                 throw new Error("Image array is not 2 dimensional")
@@ -127,6 +124,6 @@ function greyScale(inputImage: Image): Image {
 }
 
 
-export function deepCopyImage(inputImage: Image): Image {
+export function deepCopyImageData(inputImage: ImageData): ImageData {
     return JSON.parse(JSON.stringify(inputImage))
 }
