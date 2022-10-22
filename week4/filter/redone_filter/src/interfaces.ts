@@ -7,6 +7,8 @@ export interface Pixel {
 
 export type Image = Pixel[][]
 
+export type kernel = readonly number[][]
+
 export interface Bmp {
     width: number,
     height: number,
