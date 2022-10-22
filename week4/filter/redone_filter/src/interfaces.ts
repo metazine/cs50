@@ -1,3 +1,5 @@
+import { deepCopyImage } from "./filter"
+
 export interface Pixel {
     a: number, // alpha (opacity)
     r: number, // red
@@ -7,20 +9,20 @@ export interface Pixel {
 
 export type ImageData = Pixel[][]
 
-interface Image {
+export interface Image {
     getPixel(x: number, y: number): Pixel,
-    setPixel(x: number, y: number, pixel: Pixel): Pixel,
+    setPixel(x: number, y: number, pixel: Pixel): void,
     width: number,
     height: number,
     data: ImageData
 }
 
-class pixelArrayImage implements Image {
+export class PixelArrayImage implements Image {
     width: number
     height: number
     data: ImageData
     constructor(imageData: ImageData) {
-        this.data = imageData
+        this.data = deepCopyImage(imageData)
         this.height =  this.data.length
         this.width = this.data[0]?.length || 0  
     }
@@ -31,8 +33,13 @@ class pixelArrayImage implements Image {
         }
         return pixelValue
     }
-    setPixel(x: number, y: number, pixel: Pixel): Pixel {
+    setPixel(x: number, y: number, pixel: Pixel): void {
+        if (this.data[y]?.[x] === undefined) {
+            throw new Error(`Position ${x}, ${y} doesn't exist`)
+        }       
         
+        //@ts-ignore I've already tested the array but typescript still rejects this
+        this.data[y][x] = pixel
     }
 }
 

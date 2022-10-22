@@ -127,6 +127,6 @@ function greyScale(inputImage: Image): Image {
 }
 
 
-function deepCopyImage(inputImage: Image): Image {
+export function deepCopyImage(inputImage: Image): Image {
     return JSON.parse(JSON.stringify(inputImage))
 }
