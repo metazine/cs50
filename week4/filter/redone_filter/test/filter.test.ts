@@ -1,24 +1,27 @@
 import filter from "../src/filter"
+import { PixelArrayImage } from "../src/interfaces"
 import testImage from "./testImage"
 
 describe("filter", () => {
+    const inputImage = new PixelArrayImage(testImage.input)
+
     it ("Rejects unknown filters", () => {
-        expect(() => {filter("unknown", testImage.input)}).toThrowError(/Unknown filter type/)
+        expect(() => {filter("unknown", inputImage)}).toThrowError(/Unknown filter type/)
     })
 
     it ("Runs greyscale filter properly", () => {
-        expect(filter("greyscale", testImage.input)).toStrictEqual(testImage.greyScaleExpectedOutput)
+        expect(filter("greyscale", inputImage).data).toStrictEqual(testImage.greyScaleExpectedOutput)
     })
 
     it ("Runs edge detection filter properly", () => {
-        expect(filter("edgeDetection", testImage.input)).toStrictEqual(testImage.edgeDetectionExpectedOutput)
+        expect(filter("edgeDetection", inputImage).data).toStrictEqual(testImage.edgeDetectionExpectedOutput)
     })
 
     it ("Runs coloring book filter properly", () => {
-        expect(filter("coloringBook", testImage.input)).toStrictEqual(testImage.coloringBookExpectedOutput)
+        expect(filter("coloringBook", inputImage).data).toStrictEqual(testImage.coloringBookExpectedOutput)
     })
 
     it ("Runs gaussian blur filter properly", () => {
-        expect(filter("gaussianBlur", testImage.input)).toStrictEqual(testImage.gaussianBlurExpectedOutput)
+        expect(filter("gaussianBlur", inputImage).data).toStrictEqual(testImage.gaussianBlurExpectedOutput)
     })
 })

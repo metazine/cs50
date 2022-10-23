@@ -1,4 +1,4 @@
-import { deepCopyImage } from "./filter"
+import { deepCopyImageData } from "./filter"
 
 export interface Pixel {
     a: number, // alpha (opacity)
@@ -7,22 +7,22 @@ export interface Pixel {
     b: number // blue
 }
 
-export type ImageData = Pixel[][]
+export type ImageDataArray = Pixel[][]
 
 export interface Image {
     getPixel(x: number, y: number): Pixel,
     setPixel(x: number, y: number, pixel: Pixel): void,
     width: number,
     height: number,
-    data: ImageData
+    data: ImageDataArray
 }
 
 export class PixelArrayImage implements Image {
     width: number
     height: number
-    data: ImageData
-    constructor(imageData: ImageData) {
-        this.data = deepCopyImage(imageData)
+    data: ImageDataArray
+    constructor(imageData: ImageDataArray) {
+        this.data = deepCopyImageData(imageData)
         this.height =  this.data.length
         this.width = this.data[0]?.length || 0  
     }
