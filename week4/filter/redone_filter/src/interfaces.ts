@@ -29,7 +29,12 @@ export class PixelArrayImage implements Image {
         this.width = this.data[0]?.length || 0  
     }
     getPixel(x: number, y: number): Pixel {
+        // makes x and y wrap around if they are not within the bounds of the array size
+        y = y >= 0 ? (y < this.height ? y : 0) : this.height - 1
+        x = x >= 0 ? (x < this.width ? x : 0) : this.width - 1
+
         let pixelValue: Pixel | undefined  = this.data.at(y)?.at(x)
+
         if (pixelValue === undefined) {
             throw new Error(`Position ${x}, ${y} doesn't exist`)
         }
@@ -40,8 +45,8 @@ export class PixelArrayImage implements Image {
             throw new Error(`Position ${x}, ${y} doesn't exist`)
         }       
         
-        //@ts-ignore I've already tested the array but typescript still rejects this
-        this.data[y][x] = pixel
+        //@ts-ignore
+        this.data[y]?.[x] = pixel
     }
 }
 
