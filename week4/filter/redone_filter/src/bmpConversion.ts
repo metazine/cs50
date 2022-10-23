@@ -1,7 +1,7 @@
-import { Image, Pixel, Bmp } from "./interfaces"
+import { Image, Pixel, Bmp, ImageDataArray, PixelArrayImage, BmpData } from "./interfaces"
 
 export function bmpToImage(bmp: Bmp): Image {
-    let image: Image = []
+    let imageDataArray: ImageDataArray = []
     const VALUES_PER_PIXEL: number = 4 //
 
     for (let y: number = 0; y < bmp.height; y++) {
@@ -16,25 +16,19 @@ export function bmpToImage(bmp: Bmp): Image {
             }
             row.push(pixel)
         }
-        image.push(row)
+        imageDataArray.push(row)
     }
+    const image: Image = new PixelArrayImage(imageDataArray)
     return image
 }
 
-export function imageToBmpData(image: Image) {
-    let data: number[] = []
-    const height: number = image.length
-    const width: number = image[0]?.length || 0
+export function imageToBmpData(image: Image): BmpData {
+    let bmpData: BmpData = []
 
-    for (let y: number = 0; y < height; y++) {
-        for (let x: number = 0; x < width; x ++) {
-            const pixel: Pixel | undefined = image[y]?.[x]
-            if (!pixel) {
-                console.log("Image is not two dimensional array")
-                process.exit(1)
-            }
-
-            data.push (
+    for (let y: number = 0; y < image.height; y++) {
+        for (let x: number = 0; x < image.width; x ++) {
+            const pixel: Pixel = image.getPixel(x, y)
+            bmpData.push (
                 pixel.a,
                 pixel.b, 
                 pixel.g, 
@@ -42,5 +36,5 @@ export function imageToBmpData(image: Image) {
             )
         }
     }
-    return data
+    return bmpData
 }
