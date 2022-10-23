@@ -9,6 +9,8 @@ export interface Pixel {
 
 export type ImageDataArray = Pixel[][]
 
+export type BmpData = number[]
+
 export interface Image {
     getPixel(x: number, y: number): Pixel,
     setPixel(x: number, y: number, pixel: Pixel): void,
