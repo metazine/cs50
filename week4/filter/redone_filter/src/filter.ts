@@ -2,13 +2,11 @@ import { Image, ImageDataArray, Pixel, PixelArrayImage } from "./interfaces"
 import applyKernel from "./applyKernel"
 
 export default function filter(filterName: string, inputImage: Image) {
-    const filterFunction: Function | undefined = filterSpecs[filterName]
-    if (filterFunction) {
-        return filterFunction(inputImage)
-    }
-    else {
+    const applyFilter: Function | undefined = filterSpecs[filterName]
+    if (applyFilter === undefined) {
         throw new Error("Unknown filter type")
     }
+    return applyFilter(inputImage)
 }
 
 const filterSpecs: Record <string, Function> = {
