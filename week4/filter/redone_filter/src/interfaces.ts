@@ -18,7 +18,6 @@ export interface Image {
     height: number,
     data: ImageDataArray
 }
-
 export class PixelArrayImage implements Image {
     width: number
     height: number
@@ -33,13 +32,14 @@ export class PixelArrayImage implements Image {
         y = y >= 0 ? (y < this.height ? y : 0) : this.height - 1
         x = x >= 0 ? (x < this.width ? x : 0) : this.width - 1
 
-        let pixelValue: Pixel | undefined  = this.data.at(y)?.at(x)
+        let pixel: Pixel | undefined  = this.data[y]?.[x]
 
-        if (pixelValue === undefined) {
+        if (pixel === undefined) {
             throw new Error(`Position ${x}, ${y} doesn't exist`)
         }
-        return pixelValue
+        return pixel
     }
+
     setPixel(x: number, y: number, pixel: Pixel): void {
         if (this.data[y]?.[x] === undefined) {
             throw new Error(`Position ${x}, ${y} doesn't exist`)
