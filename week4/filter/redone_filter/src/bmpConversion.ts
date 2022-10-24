@@ -4,9 +4,9 @@ export function bmpToImage(bmp: Bmp): Image {
     let imageDataArray: ImageDataArray = []
     const VALUES_PER_PIXEL: number = 4 //
 
-    for (let y: number = 0; y < bmp.height; y++) {
+    for (let y = 0; y < bmp.height; y++) {
         let row: Pixel[] = []
-        for (let x: number = 0; x < bmp.width * VALUES_PER_PIXEL; x += VALUES_PER_PIXEL) {
+        for (let x = 0; x < bmp.width * VALUES_PER_PIXEL; x += VALUES_PER_PIXEL) {
             const location = y * bmp.width * VALUES_PER_PIXEL + x
             let pixel: Pixel = {
                 a: bmp.data[location] || NaN,     
@@ -25,8 +25,8 @@ export function bmpToImage(bmp: Bmp): Image {
 export function imageToBmpData(image: Image): BmpData {
     let bmpData: BmpData = []
 
-    for (let y: number = 0; y < image.height; y++) {
-        for (let x: number = 0; x < image.width; x ++) {
+    for (let y = 0; y < image.height; y++) {
+        for (let x = 0; x < image.width; x ++) {
             const pixel: Pixel = image.getPixel(x, y)
             bmpData.push (
                 pixel.a,
