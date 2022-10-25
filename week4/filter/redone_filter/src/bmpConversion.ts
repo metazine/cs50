@@ -1,4 +1,6 @@
-import { Image, Pixel, Bmp, ImageDataArray, PixelArrayImage, BmpData } from "./interfaces"
+import { Image, Pixel, Bmp} from "./interfaces"
+import PixelArrayImage from "./pixelArrayImage"
+import { ImageDataArray, BmpData } from "./types"
 
 export function bmpToImage(bmp: Bmp): Image {
     let imageDataArray: ImageDataArray = []

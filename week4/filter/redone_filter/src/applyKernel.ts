@@ -1,4 +1,6 @@
-import { Image, Pixel, Kernel, PixelArrayImage } from "./interfaces"
+import { Image, Pixel } from "./interfaces"
+import PixelArrayImage from "./pixelArrayImage"
+import { Kernel } from "./types"
 
 export default function applyKernel(kernel: Kernel, input: Image) {
     const kernelSize: number = kernel.length

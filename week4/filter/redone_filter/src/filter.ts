@@ -1,4 +1,6 @@
-import { Image, ImageDataArray, Pixel, PixelArrayImage } from "./interfaces"
+import { Image, Pixel } from "./interfaces"
+import { ImageDataArray } from "./types"
+import PixelArrayImage from "./pixelArrayImage"
 import applyKernel from "./applyKernel"
 
 export default function filter(filterName: string, inputImage: Image) {
@@ -95,6 +97,3 @@ function greyScale(input: Image): Image {
 }
 
 
-export function deepCopyImageData(inputImage: ImageDataArray): ImageDataArray {
-    return JSON.parse(JSON.stringify(inputImage))
-}
