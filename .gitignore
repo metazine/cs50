@@ -3,6 +3,7 @@ week4/filter/redone_filter/node_modules/*
 week4/filter/redone_filter/*.png
 week4/filter/redone_filter/*.bmp
 *.o
+*.db
 week4/filter/redone_filter/*.jpeg
 week4/filter/redone_filter/test_images/*
 week9/finance/typescript-version/node_modules/*
