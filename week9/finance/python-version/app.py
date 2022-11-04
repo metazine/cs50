@@ -53,7 +53,6 @@ def buy():
     """Buy shares of stock"""
     return apology("TODO")
 
-
 @app.route("/history")
 @login_required
 def history():
@@ -113,6 +112,17 @@ def logout():
 @login_required
 def quote():
     """Get stock quote."""
+    
+    if request.method == "POST":
+        symbol = request.form.get("symbol")
+
+        if not symbol:
+            return apology("No symbol given")
+
+        
+    else:
+        return render_template("quote.html")
+
     return apology("TODO")
 
 
@@ -138,12 +148,17 @@ def register():
 
         username = request.form.get("username")
         password = request.form.get("password")
-        passwordCheck = request.form.get("password_check")
+        password_check = request.form.get("password_check")
+
+        if password != password_check:
+            return apology("passwords must match", 403)
 
         if len(username) > 50: 
             return apology("username is too long", 403)
 
         password_hash = generate_password_hash(password)
+        db.execute("INSERT INTO users (username, hash) VALUES (?, ?)", username, password_hash)
+        
 
         
 
