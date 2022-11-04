@@ -15,3 +15,5 @@ week4/filter/redone_filter/index.tsbuildinfo
 week4/filter/redone_filter/out/tsconfig.tsbuildinfo
 week9/finance/python-version/__pycache__/app.cpython-310.pyc
 week9/finance/python-version/__pycache__/helpers.cpython-310.pyc
+week9/finance/python-version/finance.db
+
