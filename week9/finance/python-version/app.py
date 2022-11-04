@@ -125,23 +125,34 @@ def register():
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
-
         # Ensure username was submitted
         if not request.form.get("username"):
             return apology("must provide username", 403)
-
+           
         # Ensure password was submitted
         elif not request.form.get("password"):
             return apology("must provide password", 403)
 
+        elif not request.form.get("password_check"):
+            return apology("You must enter your password twice")
 
+        username = request.form.get("username")
+        password = request.form.get("password")
+        passwordCheck = request.form.get("password_check")
+
+        if len(username) > 50: 
+            return apology("username is too long", 403)
+
+        password_hash = generate_password_hash(password)
+
+        
 
         # Redirect user to home page
-        return redirect("/")
+        return redirect("/login")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
-        return render_template("login.html")
+        return render_template("register.html")
 
 
 @app.route("/sell", methods=["GET", "POST"])
