@@ -119,11 +119,18 @@ def quote():
         if not symbol:
             return apology("No symbol given")
 
+        print(lookup("NFLX"))
+        quote = lookup(symbol)
         
+        if not quote:
+            return apology("unknown symbol")
+
+        return render_template("quote_results.html", name=quote["name"], symbol=quote["symbol"], price=quote["price"])
+
+
     else:
         return render_template("quote.html")
 
-    return apology("TODO")
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -158,9 +165,6 @@ def register():
 
         password_hash = generate_password_hash(password)
         db.execute("INSERT INTO users (username, hash) VALUES (?, ?)", username, password_hash)
-        
-
-        
 
         # Redirect user to home page
         return redirect("/login")
