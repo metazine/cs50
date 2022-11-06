@@ -80,9 +80,11 @@ def buy():
         total_price = stock["value"] * stock_amount
 
         if user_cash - total_price < 0:
-            return apology("not enough cash")            
+            return apology("not enough cash")
+        else:
+            user_cash -= total_price          
 
-        
+        db.execute("UPDATE users SET cash = (?) WHERE id IS (?)", user_cash, session["user_id"] )
 
         return apology("TODO")
 
