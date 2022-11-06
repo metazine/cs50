@@ -77,7 +77,7 @@ def buy():
         if not is_stock_name_already_in_table:
             db.execute("INSERT INTO stock (name, symbol) VALUES (?, ?);", stock["name"], stock["symbol"])
 
-        user_cash = db.execute("SELECT cash FROM users where id IS ?", session["user_id"])[0]["cash"]
+        user_cash = db.execute("SELECT cash FROM user where id IS ?", session["user_id"])[0]["cash"]
         total_price = stock["price"] * stock_amount
 
         if user_cash - total_price < 0:
@@ -85,7 +85,7 @@ def buy():
         else:
             user_cash -= total_price
              
-        db.execute("UPDATE users SET cash = (?) WHERE id IS (?)", user_cash, session["user_id"])
+        db.execute("UPDATE user SET cash = (?) WHERE id IS (?)", user_cash, session["user_id"])
 
         stock_id = db.execute("SELECT id FROM stock WHERE name IS (?)", stock["name"])[0]["id"]
 
@@ -123,7 +123,7 @@ def login():
             return apology("must provide password", 403)
 
         # Query database for username
-        rows = db.execute("SELECT * FROM users WHERE username = :username",
+        rows = db.execute("SELECT * FROM user WHERE username = :username",
                           username=request.form.get("username"))
 
         # Ensure username exists and password is correct
@@ -205,7 +205,7 @@ def register():
             return apology("username is too long", 403)
 
         password_hash = generate_password_hash(password)
-        db.execute("INSERT INTO users (username, hash) VALUES (?, ?)", username, password_hash)
+        db.execute("INSERT INTO user (username, hash) VALUES (?, ?)", username, password_hash)
 
         # Redirect user to home page
         return redirect("/login")
