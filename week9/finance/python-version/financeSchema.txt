@@ -5,8 +5,6 @@ CREATE TABLE IF NOT EXISTS 'users' (
     'cash' NUMERIC NOT NULL DEFAULT 10000.00 
 );
 
-CREATE TABLE sqlite_sequence(name,seq);
-
 CREATE UNIQUE INDEX 'username' ON "users" ("username");
 
 CREATE TABLE IF NOT EXISTS 'stock' (
@@ -17,10 +15,10 @@ CREATE TABLE IF NOT EXISTS 'stock' (
 
 CREATE TABLE IF NOT EXISTS 'trade' (
     'id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    'date' DATE NOT NULL,
-    'time' TIME NOT NULL,
-    'stock_id' INT,
-    'user_id' INT,
+    'share_count' INTEGER NOT NULL,
+    'date_time' DATETIME NOT NULL,
+    'stock_id' INTEGER,
+    'user_id' INTEGER,
     FOREIGN KEY ('stock_id') REFERENCES 'stock'('id'),
-    FOREIGN KEY ('user_id') REFERENCES 'users'('id')
+    FOREIGN KEY ('user_id')  REFERENCES 'users'('id')
 );
