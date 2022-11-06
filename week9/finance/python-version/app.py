@@ -6,6 +6,7 @@ from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
+from datetime import date, datetime
 
 from helpers import apology, login_required, lookup, usd, parseInt
 
@@ -69,28 +70,32 @@ def buy():
         stock = lookup(symbol)
 
         if not stock:
-            return apology("Unknown stock symbol")        
+            return apology("Unknown stock symbol")
         
         is_stock_name_already_in_table = len(db.execute("SELECT (name) FROM stock WHERE name IS ?", stock["name"])) > 0
         
         if not is_stock_name_already_in_table:
             db.execute("INSERT INTO stock (name, symbol) VALUES (?, ?);", stock["name"], stock["symbol"])
 
-        user_cash = db.execute("SELECT cash FROM users where id IS ?", session["user_id"])
-        total_price = stock["value"] * stock_amount
+        user_cash = db.execute("SELECT cash FROM users where id IS ?", session["user_id"])[0]["cash"]
+        total_price = stock["price"] * stock_amount
 
         if user_cash - total_price < 0:
             return apology("not enough cash")
         else:
-            user_cash -= total_price          
+            user_cash -= total_price
+             
+        db.execute("UPDATE users SET cash = (?) WHERE id IS (?)", user_cash, session["user_id"])
 
-        db.execute("UPDATE users SET cash = (?) WHERE id IS (?)", user_cash, session["user_id"] )
+        stock_id = db.execute("SELECT id FROM stock WHERE name IS (?)", stock["name"])[0]["id"]
 
-        return apology("TODO")
+        date_time = datetime.now().strftime("%d/%m/%y %H:%M:%S")
+        db.execute("INSERT INTO trade (date_time, share_count, stock_id, user_id) VALUES (?, ?, ?, ?)", date_time, stock_amount, stock_id, session["user_id"])
+
+        return redirect("/")
 
     else:
-        return render_template("buy_request.html")
-
+        return render_template("buy_request.html") 
 
 @app.route("/history")
 @login_required
