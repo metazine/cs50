@@ -48,6 +48,14 @@ def lookup(symbol):
     except (KeyError, TypeError, ValueError):
         return None
 
+def parseInt(text):
+    try:
+        if int(text) == float(text):
+            return int(text)
+        else:
+            return None
+    except:
+        return None
 
 def usd(value):
     """Format value as USD."""
