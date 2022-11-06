@@ -101,8 +101,18 @@ def buy():
 @login_required
 def history():
     """Show history of transactions"""
-    return apology("TODO")
+    trades = db.execute("SELECT * FROM trade WHERE user_id IS ? ORDER BY date_time DESC", session["user_id"])
+    
+    try:
+        trades[0]
+    except:
+        return apology("You have made no trades yet")
 
+    for i in range(len(trades)):
+        trades[i]["stock"] = db.execute("SELECT * FROM stock WHERE id IS ?", trades[i]["stock_id"])[0]
+        trades[i]["bought_or_sold"] = "bought" if trades[i]["share_count"] > 0 else "sold"
+    
+    return render_template("history.html", trades=trades)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():

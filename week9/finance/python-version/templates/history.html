@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Quote
+{% endblock %}
+
+{% block main %}
+    <ul class="list-group">
+    {% for trade in trades %}
+        <li class="list-group-item">You {{ trade["bought_or_sold"] }} {{ trade["share_count"] }} shares of {{ trade["stock"]["name"] }} ({{ trade["stock"]["symbol"] }}) at {{ trade["date_time"] }}</li>
+    {% endfor%}
+    </ul>
+{% endblock %}
