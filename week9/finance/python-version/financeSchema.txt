@@ -1,0 +1,26 @@
+CREATE TABLE IF NOT EXISTS 'users' (
+    'id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    'username' TEXT NOT NULL,
+    'hash' TEXT NOT NULL,
+    'cash' NUMERIC NOT NULL DEFAULT 10000.00 
+);
+
+CREATE TABLE sqlite_sequence(name,seq);
+
+CREATE UNIQUE INDEX 'username' ON "users" ("username");
+
+CREATE TABLE IF NOT EXISTS 'stock' (
+    'id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    'name' TEXT NOT NULL UNIQUE,
+    'symbol' TEXT NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS 'trade' (
+    'id' INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    'date' DATE NOT NULL,
+    'time' TIME NOT NULL,
+    'stock_id' INT,
+    'user_id' INT,
+    FOREIGN KEY ('stock_id') REFERENCES 'stock'('id'),
+    FOREIGN KEY ('user_id') REFERENCES 'users'('id')
+);
