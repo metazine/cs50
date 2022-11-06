@@ -7,7 +7,7 @@ from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import apology, login_required, lookup, usd
+from helpers import apology, login_required, lookup, usd, parseInt
 
 # Configure application
 app = Flask(__name__)
@@ -51,7 +51,44 @@ def index():
 @login_required
 def buy():
     """Buy shares of stock"""
-    return apology("TODO")
+    if request.method == "POST":
+        symbol = request.form.get("symbol")
+        stock_amount_text = request.form.get("amount")
+
+        if not symbol:
+            return apology("Symbol not given")
+        if not stock_amount_text:
+            return apology("Amount not given")
+        
+        stock_amount = parseInt(stock_amount_text)
+        if not stock_amount:
+            return apology("amount is not an integer")
+        if stock_amount < 1:
+            return apology("Amount of stock bought must be one or more")
+
+        stock = lookup(symbol)
+
+        if not stock:
+            return apology("Unknown stock symbol")        
+        
+        is_stock_name_already_in_table = len(db.execute("SELECT (name) FROM stock WHERE name IS ?", stock["name"])) > 0
+        
+        if not is_stock_name_already_in_table:
+            db.execute("INSERT INTO stock (name, symbol) VALUES (?, ?);", stock["name"], stock["symbol"])
+
+        user_cash = db.execute("SELECT cash FROM users where id IS ?", session["user_id"])
+        total_price = stock["value"] * stock_amount
+
+        if user_cash - total_price < 0:
+            return apology("not enough cash")            
+
+        
+
+        return apology("TODO")
+
+    else:
+        return render_template("buy_request.html")
+
 
 @app.route("/history")
 @login_required
@@ -121,17 +158,14 @@ def quote():
 
         print(lookup("NFLX"))
         quote = lookup(symbol)
-        
+
         if not quote:
             return apology("unknown symbol")
 
         return render_template("quote_results.html", name=quote["name"], symbol=quote["symbol"], price=quote["price"])
-
-
+        
     else:
         return render_template("quote.html")
-
-
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
