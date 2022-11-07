@@ -228,7 +228,43 @@ def register():
 @app.route("/sell", methods=["GET", "POST"])
 @login_required
 def sell():
-    """Sell shares of stock"""
+    # """Sell shares of stock"""
+    # if request.method == "POST":
+    #     symbol = request.form.get("symbol")
+    #     stock_amount_text = request.form.get("amount")
+
+    #     if not symbol:
+    #         return apology("Symbol not given")
+    #     if not stock_amount_text:
+    #         return apology("Amount not given")
+        
+    #     stock_amount = parseInt(stock_amount_text)
+    #     if not stock_amount:
+    #         return apology("amount is not an integer")
+    #     if stock_amount < 1:
+    #         return apology("Amount of shares sold must be greater than zero")
+
+    #     stock = lookup(symbol)
+
+    #     if not stock:
+    #         return apology("Unknown stock symbol")
+        
+    #     user_cash = db.execute("SELECT cash FROM user where id IS ?", session["user_id"])[0]["cash"]
+    #     total_price = stock["price"] * stock_amount
+
+    #     if user_cash - total_price < 0:
+    #         return apology("not enough cash")
+    #     else:
+    #         user_cash -= total_price
+             
+    #     db.execute("UPDATE user SET cash = (?) WHERE id IS (?)", user_cash, session["user_id"])
+
+    #     stock_id = db.execute("SELECT id FROM stock WHERE name IS (?)", stock["name"])[0]["id"]
+
+    #     date_time = datetime.now().strftime("%d/%m/%y %H:%M:%S")
+    #     db.execute("INSERT INTO trade (date_time, share_count, stock_id, user_id) VALUES (?, ?, ?, ?)", date_time, stock_amount, stock_id, session["user_id"])
+
+    #     return redirect("/")
     return render_template("apology.html")
 
 
