@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block main %}
+<!-- table was reverse engineered from CS50s own implementation of finance @finance.cs50.net-->
+<ul class="list-group">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th class="text-start">Symbol</th>
+                <th class="text-start">Name</th>
+                <th class="text-end">Shares</th>
+                <th class="text-end">Price</th>
+                <th class="text-end">TOTAL</th>
+            </tr>
+        </thead>
+       <tbody>
+            {% for owned_stock in owned_stocks  %}
+            <tr>
+                <td class="text-start">{{ owned_stock["name"] }}</td>
+                <td class="text-start">{{ owned_stock["symbol"] }}</td>
+                <td class="text-end">{{ owned_stock["share_count"] }}</td>
+                <td class="text-end">{{ owned_stock["price"] | usd }}</td>
+                <td class="text-end">{{ owned_stock["total_price"] | usd }}</td>
+            </tr>
+            {% endfor %}              
+        </tbody>
+        <tfoot>
+            <tr>
+                <td class="border-0 fw-bold text-end" colspan="4">Cash</td>
+                <td class="border-0 text-end">{{ cash | usd}}</td>
+            </tr>
+            <tr>
+                <td class="border-0 fw-bold text-end" colspan="4">TOTAL</td>
+                <td class="border-0 w-bold text-end">{{total_cash | usd}}</td>
+            </tr>
+        </tfoot>
+    </table>
+</ul>
+{% endblock %}

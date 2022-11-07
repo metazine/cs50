@@ -45,7 +45,34 @@ if not os.environ.get("API_KEY"):
 @login_required
 def index():
     """Show portfolio of stocks"""
-    return apology("TODO")
+    share_count_sums = db.execute("SELECT stock_id, SUM(share_count) FROM trade WHERE user_id IS ? AND SUM(share_count) > 0 GROUP BY share_count", session["user_id"])
+
+    # owned_stocks_list = [{}]
+    # cash = db.execute("SELECT cash FROM user WHERE id IS ?", session["user_id"])[0]["cash"]
+    # total_price_of_all_stock: float = 0
+
+    # for key in current_stocks_owned:
+    #     if current_stocks_owned[key] == 0:
+    #         continue
+        
+    #     stock = db.execute("SELECT price, name, symbol FROM stock WHERE id IS ?", key)[0]
+    #     price = lookup(stock["symbol"])["price"]
+    #     total_price_of_this_stock: float = price * current_stocks_owned[key]
+    #     total_price_of_all_stock += total_price_of_this_stock
+
+    #     owned_stocks_list.append({ 
+    #         "name": stock["name"],
+    #         "symbol": stock["symbol"],
+    #         "share_count": current_stocks_owned[key], 
+    #         "price": price, 
+    #         "total_price": total_price_of_this_stock
+    #     })
+
+
+    owned_stocks_list.pop(0)
+    total_cash = total_price_of_all_stock + cash
+    return render_template("home.html", owned_stocks=owned_stocks_list, total_stock_price=total_price_of_all_stock, total_cash=total_cash, cash=cash)
+
 
 
 @app.route("/buy", methods=["GET", "POST"])
@@ -109,7 +136,7 @@ def history():
         return apology("You have made no trades yet")
 
     for i in range(len(trades)):
-        trades[i]["stock"] = db.execute("SELECT * FROM stock WHERE id IS ?", trades[i]["stock_id"])[0]
+        trades[i]["stock"] = db.execute("SELECT name, symbol FROM stock WHERE id IS ?", trades[i]["stock_id"])[0]
         trades[i]["bought_or_sold"] = "bought" if trades[i]["share_count"] > 0 else "sold"
     
     return render_template("history.html", trades=trades)
@@ -266,7 +293,7 @@ def sell():
 
     #     return redirect("/")
     return render_template("apology.html")
-
+       
 
 def errorhandler(e):
     """Handle error"""
