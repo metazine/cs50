@@ -18,24 +18,24 @@
             </tr>
         </thead>
        <tbody>
-            {% for owned_stock in owned_stocks  %}
+            {% for stock in stocks  %}
             <tr>
-                <td class="text-start">{{ owned_stock["name"] }}</td>
-                <td class="text-start">{{ owned_stock["symbol"] }}</td>
-                <td class="text-end">{{ owned_stock["share_count"] }}</td>
-                <td class="text-end">{{ owned_stock["price"] | usd }}</td>
-                <td class="text-end">{{ owned_stock["total_price"] | usd }}</td>
+                <td class="text-start">{{ stock["name"] }}</td>
+                <td class="text-start">{{ stock["symbol"] }}</td>
+                <td class="text-end">{{ stock["shares_owned"] }}</td>
+                <td class="text-end">{{ stock["unit_price"] | usd }}</td>
+                <td class="text-end">{{ stock["total_price"] | usd }}</td>
             </tr>
             {% endfor %}              
         </tbody>
         <tfoot>
             <tr>
                 <td class="border-0 fw-bold text-end" colspan="4">Cash</td>
-                <td class="border-0 text-end">{{ cash | usd}}</td>
+                <td class="border-0 text-end">{{ cash | usd }}</td>
             </tr>
             <tr>
                 <td class="border-0 fw-bold text-end" colspan="4">TOTAL</td>
-                <td class="border-0 w-bold text-end">{{total_cash | usd}}</td>
+                <td class="border-0 w-bold text-end">{{ overall_value | usd }}</td>
             </tr>
         </tfoot>
     </table>
