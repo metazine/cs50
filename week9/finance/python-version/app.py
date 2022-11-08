@@ -51,7 +51,10 @@ def index():
          WHERE  user_id IS ?
          GROUP  BY stock_id
         HAVING  share_count_sum > 0
-        """, session["user_id"])
+        """, 
+        session["user_id"]
+    )
+
     cash = db.execute("SELECT cash FROM user WHERE id IS ?", session["user_id"])[0]["cash"]
     stocks = [{}]
     overall_value = cash
@@ -140,6 +143,7 @@ def history():
     for i in range(len(trades)):
         trades[i]["stock"] = db.execute("SELECT name, symbol FROM stock WHERE id IS ?", trades[i]["stock_id"])[0]
         trades[i]["bought_or_sold"] = "bought" if trades[i]["share_count"] > 0 else "sold"
+        trades[i]["share_count"] = abs(trades[i]["share_count"])
     
     return render_template("history.html", trades=trades)
 
@@ -257,44 +261,40 @@ def register():
 @app.route("/sell", methods=["GET", "POST"])
 @login_required
 def sell():
-    # """Sell shares of stock"""
-    # if request.method == "POST":
-    #     symbol = request.form.get("symbol")
-    #     stock_amount_text = request.form.get("amount")
+    """Sell shares of stock"""
+    if request.method == "POST":
+        symbol = request.form.get("symbol")
+        shares_to_be_sold_count_text = request.form.get("amount")
 
-    #     if not symbol:
-    #         return apology("Symbol not given")
-    #     if not stock_amount_text:
-    #         return apology("Amount not given")
+        if not symbol:
+            return apology("Symbol not given")
+        if not shares_to_be_sold_count_text:
+            return apology("Amount not given")
         
-    #     stock_amount = parseInt(stock_amount_text)
-    #     if not stock_amount:
-    #         return apology("amount is not an integer")
-    #     if stock_amount < 1:
-    #         return apology("Amount of shares sold must be greater than zero")
+        shares_to_be_sold_count = parseInt(shares_to_be_sold_count_text)
+        if not shares_to_be_sold_count:
+            return apology("amount is not an integer")
+        if shares_to_be_sold_count < 1:
+            return apology("Amount of shares sold must be greater than zero")
 
-    #     stock = lookup(symbol)
+        stock = db.execute("SELECT SUM(share_count) AS share_count_sum, stock_id FROM trade WHERE stock_id IS (SELECT id FROM stock WHERE symbol IS ?)", symbol)
 
-    #     if not stock:
-    #         return apology("Unknown stock symbol")
-        
-    #     user_cash = db.execute("SELECT cash FROM user where id IS ?", session["user_id"])[0]["cash"]
-    #     total_price = stock["price"] * stock_amount
+        if stock[0]["share_count_sum"] - shares_to_be_sold_count < 0:
+            return apology("You don't have enough shares to sell")
 
-    #     if user_cash - total_price < 0:
-    #         return apology("not enough cash")
-    #     else:
-    #         user_cash -= total_price
-             
-    #     db.execute("UPDATE user SET cash = (?) WHERE id IS (?)", user_cash, session["user_id"])
+        if len(stock) == 0:
+            return apology("You don't own any of that stock")
 
-    #     stock_id = db.execute("SELECT id FROM stock WHERE name IS (?)", stock["name"])[0]["id"]
+        stock[0]["price"] = lookup(symbol)["price"]
+        user_cash = db.execute("SELECT cash FROM user WHERE id IS ?", session["user_id"])[0]["cash"]
+        user_cash += stock[0]["price"] * shares_to_be_sold_count
 
-    #     date_time = datetime.now().strftime("%d/%m/%y %H:%M:%S")
-    #     db.execute("INSERT INTO trade (date_time, share_count, stock_id, user_id) VALUES (?, ?, ?, ?)", date_time, stock_amount, stock_id, session["user_id"])
+        date_time = datetime.now().strftime("%d/%m/%y %H:%M:%S")
+        db.execute("INSERT INTO trade (date_time, share_count, stock_id, user_id) VALUES (?, ?, ?, ?)", date_time, -shares_to_be_sold_count, stock[0]["stock_id"], session["user_id"])
+        db.execute("UPDATE user SET cash = (?) WHERE id IS (?)", user_cash, session["user_id"])        
+        return redirect("/")
 
-    #     return redirect("/")
-    return render_template("apology.html")
+    return render_template("sell.html")
        
 
 def errorhandler(e):
