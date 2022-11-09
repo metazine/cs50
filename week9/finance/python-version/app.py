@@ -54,7 +54,6 @@ def index():
         """, 
         session["user_id"]
     )
-
     cash = db.execute("SELECT cash FROM user WHERE id IS ?", session["user_id"])[0]["cash"]
     stocks = [{}]
     overall_value = cash
@@ -75,7 +74,7 @@ def index():
     
     stocks.pop(0)
     if len(stocks) == 0:
-        return redirect("/buy")
+        return render_template("/nostocks.html")
     
     return render_template("home.html", stocks=stocks, overall_value=overall_value, cash=cash)
 
@@ -86,7 +85,7 @@ def buy():
     """Buy shares of stock"""
     if request.method == "POST":
         symbol = request.form.get("symbol")
-        stock_amount_text = request.form.get("amount")
+        stock_amount_text = request.form.get("shares")
 
         if not symbol:
             return apology("Symbol not given")
@@ -228,30 +227,34 @@ def register():
     if request.method == "POST":
         # Ensure username was submitted
         if not request.form.get("username"):
-            return apology("must provide username", 403)
+            return apology("must provide username", 400)
            
         # Ensure password was submitted
         elif not request.form.get("password"):
-            return apology("must provide password", 403)
+            return apology("must provide password", 400)
 
-        elif not request.form.get("password_check"):
+        elif not request.form.get("confirmation"):
             return apology("You must enter your password twice")
 
         username = request.form.get("username")
         password = request.form.get("password")
-        password_check = request.form.get("password_check")
+        confirmation = request.form.get("confirmation")
 
-        if password != password_check:
-            return apology("passwords must match", 403)
+        if password != confirmation:
+            return apology("passwords must match", 400)
 
         if len(username) > 50: 
-            return apology("username is too long", 403)
+            return apology("username is too long", 400)
 
         password_hash = generate_password_hash(password)
-        db.execute("INSERT INTO user (username, hash) VALUES (?, ?)", username, password_hash)
+
+        try:
+            db.execute("INSERT INTO user (username, hash) VALUES (?, ?)", username, password_hash)
+        except:
+            return apology("Username is already taken", 400)
 
         # Redirect user to home page
-        return redirect("/login")
+        return render_template("registered.html")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
@@ -264,7 +267,7 @@ def sell():
     """Sell shares of stock"""
     if request.method == "POST":
         symbol = request.form.get("symbol")
-        shares_to_be_sold_count_text = request.form.get("amount")
+        shares_to_be_sold_count_text = request.form.get("shares")
 
         if not symbol:
             return apology("Symbol not given")
@@ -293,8 +296,10 @@ def sell():
         db.execute("INSERT INTO trade (date_time, share_count, stock_id, user_id) VALUES (?, ?, ?, ?)", date_time, -shares_to_be_sold_count, stock[0]["stock_id"], session["user_id"])
         db.execute("UPDATE user SET cash = (?) WHERE id IS (?)", user_cash, session["user_id"])        
         return redirect("/")
-
-    return render_template("sell.html")
+    
+    stocks = db.execute("SELECT symbol FROM stock WHERE id IN (SELECT stock_id FROM trade GROUP BY stock_id HAVING SUM(share_count) > 0 AND user_id = ?)",  session["user_id"])
+    
+    return render_template("sell.html", stocks=stocks)
        
 
 def errorhandler(e):
