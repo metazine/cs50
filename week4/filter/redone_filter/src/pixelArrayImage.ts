@@ -1,4 +1,5 @@
-import { Image } from "./interfaces"
+import { Image, Pixel } from "./interfaces"
+import { ImageDataArray } from "./types"
 
 export default class PixelArrayImage implements Image {
     width: number
@@ -30,4 +31,8 @@ export default class PixelArrayImage implements Image {
         //@ts-ignore
         this.data[y]?.[x] = pixel
     }
+}
+
+function deepCopyImageData(imageData: ImageDataArray): ImageDataArray {
+    return JSON.parse(JSON.stringify(imageData))
 }
