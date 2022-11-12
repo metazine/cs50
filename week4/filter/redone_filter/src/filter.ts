@@ -1,5 +1,4 @@
 import { Image, Pixel } from "./interfaces"
-import { ImageDataArray } from "./types"
 import PixelArrayImage from "./pixelArrayImage"
 import applyKernel from "./applyKernel"
 

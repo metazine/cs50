@@ -1,4 +1,4 @@
-import { Kernel, ImageDataArray} from "../src/interfaces"
+import { ImageDataArray, Kernel } from "../src/types"
 
 const inputImage: ImageDataArray= [
     [{a:0, r:2, g:4, b:6 },{a:0, r:8, g:10, b:12 },{a:0, r:14, g:16, b:18 }],

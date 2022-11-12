@@ -1,5 +1,5 @@
 import filter from "../src/filter"
-import { PixelArrayImage } from "../src/interfaces"
+import PixelArrayImage from "../src/pixelArrayImage"
 import testImage from "./testImage"
 
 describe("filter", () => {
