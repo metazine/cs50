@@ -35,8 +35,13 @@ def index():
         day = request.form.get("day")
 
 
+        """
+            January 2024 - This input has not been escaped.
+            I haven't updated the code as I wanted to leave it as how I completed the code when I first submitted it.
+            But I do want to make it clear that I understand that this is incredibly dangerous.
+        """        
 
-        db.execute(f"INSERT INTO birthdays (name, month, day) VALUES (\"{name}\",\"{month}\",\"{day}\");")
+        db.execute(f"INSERT INTO birthdays (name, month, day) VALUES (\"{name}\",\"{month}\",\"{day}\");") # SHOULD BE ESCAPED - JAN24
 
         return redirect("/")
 
