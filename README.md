@@ -4,7 +4,7 @@
 
 CS50 covers the basics of many topics, including C, JavaScript, Python, HTML, CSS and SQL.
 
-For each week in repository I've written a short readme to explain what each project is doing.
+For each week in this repository I've written a short "readme" to explain what each project is doing.
 
 ## Summary of content for each week.
 
