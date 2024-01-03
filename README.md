@@ -3,8 +3,11 @@
 <a href="https://www.edx.org/learn/computer-science/harvard-university-cs50-s-introduction-to-computer-science">CS50</a> is Harvard University's introduction to Computer Science.
 
 CS50 covers the basics of many topics, including C, JavaScript, Python, HTML, CSS and SQL.
+The course is 10 "weeks" long (excluding week 0), and each week is supposed to take 10-20 hours to complete.
 
-For each week in this repository I've written a short "readme" to explain what each project is doing.
+I took a year to complete the course, doing it in my spare time out of school.
+
+For each project I've written a short "readme" to explain what each project is doing.
 
 ## Summary of content for each week.
 
