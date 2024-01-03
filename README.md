@@ -12,7 +12,7 @@ For each project I've written a short "readme" to explain what each project is d
 ## Summary of content for each week.
 
 ### Week 1
-    * Introduced C and its basic syntax (loops, functions, conditionals)
+* Introduced C and its basic syntax (loops, functions, conditionals)
 
 ### Week 2
 * Characters
