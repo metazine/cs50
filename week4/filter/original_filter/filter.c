@@ -1,3 +1,5 @@
+// The code in this file was provided by CS50, I did not write it.
+
 #include <getopt.h>
 #include <stdio.h>
 #include <stdlib.h>
