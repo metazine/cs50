@@ -63,8 +63,8 @@ For each project I've written a short "readme" to explain what each project is d
 
 # Note
 
-Some of the source code was provided by CS50 to do things that hadn't yet or aren't covered in the course.
+Some of the code was provided by CS50 for the course to perform various utilities. 
 I've put comments at the top of files that were provided entirely by CS50 stating this.
 
-Some files also have comments which are there to point the participant in the correct direction.
+Some files also have comments which are there to tell the participant where and what sort of thing they need to write.
 These are usually labelled as "TODO", and are from the CS50 team.
