@@ -11,27 +11,27 @@ For each project I've written a short "readme" to explain what each project is d
 
 ## Summary of content for each week.
 
-### Week 1
+### [Week 1](https://github.com/metazine/cs50/tree/master/week1)
 * Introduced C and its basic syntax (loops, functions, conditionals)
 
-### Week 2
+### [Week 2](https://github.com/metazine/cs50/tree/master/week2)
 * Characters
 * Strings
 * Debugging
 * Command-line arguments
 
-### Week 3
+### [Week 3](https://github.com/metazine/cs50/tree/master/week3)
 * Search algorithms (Linear and Binary search)
 * Sorting algorithms (Merge and Bubble sorts)
 * Recursion
 
-### Week 4
+### [Week 4](https://github.com/metazine/cs50/tree/master/week4)
 * Hexadecimal
 * Pointers
 * Call stack
 * File Pointers
 
-### Week 5
+### [Week 5](https://github.com/metazine/cs50/tree/master/week5)
 * Data structures
 * Hash tables
 * Hashing
@@ -39,26 +39,26 @@ For each project I've written a short "readme" to explain what each project is d
 * Stacks
 * Tries
 
-### Week 6
+### [Week 6](https://github.com/metazine/cs50/tree/master/week6)
 * Python
 
-### Week 7
+### [Week 7](https://github.com/metazine/cs50/tree/master/week7)
 * SQL
 * Relational Databases
 * SQLite
 
-### Week 8
+### [Week 8](https://github.com/metazine/cs50/tree/master/week8)
 * HTML
 * CSS
 * JavaScript (client-side)
 
-### Week 9
+### [Week 9](https://github.com/metazine/cs50/tree/master/week9)
 * Flask (Python web-server library)
 * POST requests
 * GET requests
 * HTTP
 
-### Week 10 
+### Week 10
 * Personal Project
 
 # Note
